@@ -793,11 +793,11 @@
       <div class="card">
         <div class="card-title">Nivel de mantenimiento</div>
         <div class="toggle-group" id="nivel-mant">
-          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IS 0</div>
-          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IL</div>
-          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IS 1</div>
-          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IS 2</div>
-          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IS 3</div>
+          <div class="tog-btn" onclick="toggleMultiple(this,'nivel_mant')">IS 0</div>
+          <div class="tog-btn" onclick="toggleMultiple(this,'nivel_mant')">IL</div>
+          <div class="tog-btn" onclick="toggleMultiple(this,'nivel_mant')">IS 1</div>
+          <div class="tog-btn" onclick="toggleMultiple(this,'nivel_mant')">IS 2</div>
+          <div class="tog-btn" onclick="toggleMultiple(this,'nivel_mant')">IS 3</div>
         </div>
         <input type="hidden" id="nivel_mant">
       </div>
@@ -1323,31 +1323,9 @@
         </div>
       </div>
 
-      <!-- Ensayos -->
+      <!-- Inspección -->
       <div class="card">
-        <div class="card-title">Ensayos no destructivos</div>
-        <div class="g2" style="margin-bottom:12px">
-          <div class="field"><label>Rueda A [MPA]</label><input type="number" step="1" inputmode="numeric" id="mpa_a"
-              placeholder="Ej: -85" oninput="autosave()"></div>
-          <div class="field"><label>Rueda B [MPA]</label><input type="number" step="1" inputmode="numeric" id="mpa_b"
-              placeholder="Ej: -80" oninput="autosave()"></div>
-        </div>
-        <div class="field" style="margin-bottom:10px">
-          <label>Rueda A — resultado velo MT</label>
-          <div class="toggle-group" id="velo-a-grp">
-            <div class="tog-btn" onclick="toggleSingle(this,'velo_a')">Sin resultados</div>
-            <div class="tog-btn" onclick="toggleSingle(this,'velo_a')">Con resultados aceptables</div>
-          </div>
-          <input type="hidden" id="velo_a">
-        </div>
-        <div class="field" style="margin-bottom:10px">
-          <label>Rueda B — resultado velo MT</label>
-          <div class="toggle-group" id="velo-b-grp">
-            <div class="tog-btn" onclick="toggleSingle(this,'velo_b')">Sin resultados</div>
-            <div class="tog-btn" onclick="toggleSingle(this,'velo_b')">Con resultados aceptables</div>
-          </div>
-          <input type="hidden" id="velo_b">
-        </div>
+        <div class="card-title">Inspección y cierre técnico</div>
         <div class="field" style="margin-bottom:10px">
           <label>Tipo de inspección</label>
           <div class="toggle-group" id="tipo-insp-grp">
@@ -1467,6 +1445,7 @@
     let fieldErrors = {};
 
     const TRABAJOS = [
+      { code: 'CL', desc: 'Clasificación nivel mant.' },
       { code: 'A', desc: 'Ultrasonido del eje montado, fisuras en eje' },
       { code: 'B', desc: 'Ultrasonido de llantas de rueda, fisuras transversales' },
       { code: 'D', desc: 'Ultrasonido de llantas de rueda, tens. residual' },
@@ -1474,7 +1453,6 @@
       { code: 'EM', desc: 'Canal de descarga' },
       { code: 'S', desc: 'Ensayo MT de mangueta' },
       { code: 'W', desc: 'Ensayo MT del eje' },
-      { code: 'CL', desc: 'Clasificación nivel mant.' },
       { code: 'IR', desc: 'Inspección rodamientos' },
       { code: 'PT', desc: 'Perfil torneado' },
       { code: 'MR', desc: 'Montaje rodamientos' },
@@ -1525,10 +1503,23 @@
     }
 
     function toggleSingle(el, hiddenId) {
+      const isActive = el.classList.contains('active');
       const group = el.parentElement;
       group.querySelectorAll('.tog-btn').forEach(b => b.classList.remove('active'));
-      el.classList.add('active');
-      document.getElementById(hiddenId).value = el.textContent.trim();
+      if (!isActive) {
+        el.classList.add('active');
+        document.getElementById(hiddenId).value = el.textContent.trim();
+      } else {
+        document.getElementById(hiddenId).value = '';
+      }
+      autosave();
+    }
+
+    function toggleMultiple(el, hiddenId) {
+      el.classList.toggle('active');
+      const group = el.parentElement;
+      const vals = Array.from(group.querySelectorAll('.tog-btn.active')).map(b => b.textContent.trim());
+      document.getElementById(hiddenId).value = vals.join(', ');
       autosave();
     }
 
@@ -1538,6 +1529,7 @@
       delete fieldErrors[inp.id];
       if (!inp.value) { autosave(); return; }
       if (vtgLimits[key]) {
+        if (key === 'oval' && !inp.id.includes('_dep')) { autosave(); return; }
         const ok = vtgLimits[key].check(v);
         inp.classList.add(ok ? 'val-ok' : 'val-error');
         if (!ok) fieldErrors[inp.id] = vtgLimits[key].msg;
@@ -1703,8 +1695,6 @@ ${trabajosXml}
         <ns3:WheelCollection>
           <ns3:Wheel ns3:differentiator="Side">
             <ns3:Side ns3:type="Side">A<\/ns3:Side>
-            <ns3:UTRadsatzkranz ns3:CaptureDate="${fCaptura}" ns3:type="TestResult">${getVal('velo_a') === 'Con resultados aceptables' ? 'mit akzeptablem Befund' : 'ohne Befund'}<\/ns3:UTRadsatzkranz>
-            <ns3:InteralStressTest ns3:CaptureDate="${fCaptura}" ns3:unit="MPa">${getVal('mpa_a') || ''}<\/ns3:InteralStressTest>
             <ns3:NominalTreadDiameter ns3:unit="mm">${getVal('rod_a_dep') || ''}<\/ns3:NominalTreadDiameter>
             <ns3:RadialDeviation ns3:CaptureDate="${fCaptura}" ns3:unit="mm">${getVal('alabeo_a_dep') || ''}<\/ns3:RadialDeviation>
             <ns3:WheelProfileDenomination ns3:type="WheelProfileDenomination">${getVal('perfil') || 'S1002 15%'}<\/ns3:WheelProfileDenomination>
@@ -1714,8 +1704,6 @@ ${trabajosXml}
           <\/ns3:Wheel>
           <ns3:Wheel ns3:differentiator="Side">
             <ns3:Side ns3:type="Side">B<\/ns3:Side>
-            <ns3:UTRadsatzkranz ns3:CaptureDate="${fCaptura}" ns3:type="TestResult">${getVal('velo_b') === 'Con resultados aceptables' ? 'mit akzeptablem Befund' : 'ohne Befund'}<\/ns3:UTRadsatzkranz>
-            <ns3:InteralStressTest ns3:CaptureDate="${fCaptura}" ns3:unit="MPa">${getVal('mpa_b') || ''}<\/ns3:InteralStressTest>
             <ns3:NominalTreadDiameter ns3:unit="mm">${getVal('rod_b_dep') || ''}<\/ns3:NominalTreadDiameter>
             <ns3:RadialDeviation ns3:CaptureDate="${fCaptura}" ns3:unit="mm">${getVal('alabeo_b_dep') || ''}<\/ns3:RadialDeviation>
             <ns3:WheelProfileDenomination ns3:type="WheelProfileDenomination">${getVal('perfil') || 'S1002 15%'}<\/ns3:WheelProfileDenomination>
