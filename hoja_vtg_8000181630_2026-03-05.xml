@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VPI_Data_Exchange xmlns="http://www.vpihamburg.de/vpi08/messages/"
+  xmlns:ns2="http://www.vpihamburg.de/vpi08/orders/"
+  xmlns:ns3="http://www.vpihamburg.de/vpi08/types/"
+  xmlns:ns4="http://www.vpihamburg.de/vpi08/general/">
+  <Header>
+    <VPI_version>3.1</VPI_version>
+    <Creation_time>2026-03-31T08:34:58.467Z</Creation_time>
+    <Interchange_control_reference>098469</Interchange_control_reference>
+    <Sender>124501</Sender>
+    <Receiver>137101</Receiver>
+  </Header>
+  <Body>
+    <carriedOutActivities>
+    <ns3:Activity ns3:code="B" ns3:description="Ultrasonido de llantas de rueda, fisuras transversales">
+      <ns3:Date>2025-10-22T00:00:00.000Z</ns3:Date>
+      <ns3:Employee>Juan</ns3:Employee>
+    </ns3:Activity>
+    <ns3:Activity ns3:code="D" ns3:description="Ultrasonido de llantas de rueda, tens. residual">
+      <ns3:Date>2025-10-22T00:00:00.000Z</ns3:Date>
+      <ns3:Employee></ns3:Employee>
+    </ns3:Activity>
+    <ns3:Activity ns3:code="CL" ns3:description="Clasificación nivel mant.">
+      <ns3:Date>2025-10-20T00:00:00.000Z</ns3:Date>
+      <ns3:Employee></ns3:Employee>
+    </ns3:Activity>
+    <ns3:Activity ns3:code="IR" ns3:description="Inspección rodamientos">
+      <ns3:Date>2026-03-05T00:00:00.000Z</ns3:Date>
+      <ns3:Employee>Cristian</ns3:Employee>
+    </ns3:Activity>
+    <ns3:Activity ns3:code="PT" ns3:description="Perfil torneado">
+      <ns3:Date>2025-10-02T00:00:00.000Z</ns3:Date>
+      <ns3:Employee></ns3:Employee>
+    </ns3:Activity>
+    <ns3:Activity ns3:code="MR" ns3:description="Montaje rodamientos">
+      <ns3:Date>2026-03-05T00:00:00.000Z</ns3:Date>
+      <ns3:Employee>Cristian</ns3:Employee>
+    </ns3:Activity>
+    <ns3:Activity ns3:code="EP" ns3:description="Eje protecc. anticorrosión">
+      <ns3:Date>2026-03-05T00:00:00.000Z</ns3:Date>
+      <ns3:Employee>Juan Fuentes</ns3:Employee>
+    </ns3:Activity>
+    </carriedOutActivities>
+    <Radsatz>
+      <ns4:technicalWheelsetOutgoing ns3:differentiator="Position" ns3:productIdentifier="8000181630">
+        <ns3:Axle>
+          <ns3:AxleNumberOld>8000181630</ns3:AxleNumberOld>
+          <ns3:JournalTreatedMechanicallyLeftA>true</ns3:JournalTreatedMechanicallyLeftA>
+          <ns3:JournalTreatedMechanicallyRightB>true</ns3:JournalTreatedMechanicallyRightB>
+        </ns3:Axle>
+        <ns3:WheelCollection>
+          <ns3:Wheel ns3:differentiator="Side">
+            <ns3:Side ns3:type="Side">A</ns3:Side>
+            <ns3:UTRadsatzkranz ns3:CaptureDate="2026-03-05T00:00:00.000Z" ns3:type="TestResult">ohne Befund</ns3:UTRadsatzkranz>
+            <ns3:InteralStressTest ns3:CaptureDate="2026-03-05T00:00:00.000Z" ns3:unit="MPa">-85</ns3:InteralStressTest>
+            <ns3:NominalTreadDiameter ns3:unit="mm">908</ns3:NominalTreadDiameter>
+            <ns3:RadialDeviation ns3:CaptureDate="2026-03-05T00:00:00.000Z" ns3:unit="mm">0.20</ns3:RadialDeviation>
+            <ns3:WheelProfileDenomination ns3:type="WheelProfileDenomination">S1002 15%</ns3:WheelProfileDenomination>
+            <ns3:FlangeThicknessSd ns3:unit="mm">30</ns3:FlangeThicknessSd>
+            <ns3:FlangeFaceQr ns3:unit="mm">11</ns3:FlangeFaceQr>
+            <ns3:FlangeHeigthSh ns3:unit="mm">28</ns3:FlangeHeigthSh>
+          </ns3:Wheel>
+          <ns3:Wheel ns3:differentiator="Side">
+            <ns3:Side ns3:type="Side">B</ns3:Side>
+            <ns3:UTRadsatzkranz ns3:CaptureDate="2026-03-05T00:00:00.000Z" ns3:type="TestResult">ohne Befund</ns3:UTRadsatzkranz>
+            <ns3:InteralStressTest ns3:CaptureDate="2026-03-05T00:00:00.000Z" ns3:unit="MPa">-80</ns3:InteralStressTest>
+            <ns3:NominalTreadDiameter ns3:unit="mm">908</ns3:NominalTreadDiameter>
+            <ns3:RadialDeviation ns3:CaptureDate="2026-03-05T00:00:00.000Z" ns3:unit="mm">0.20</ns3:RadialDeviation>
+            <ns3:WheelProfileDenomination ns3:type="WheelProfileDenomination">S1002 15%</ns3:WheelProfileDenomination>
+            <ns3:FlangeThicknessSd ns3:unit="mm">29</ns3:FlangeThicknessSd>
+            <ns3:FlangeFaceQr ns3:unit="mm">11</ns3:FlangeFaceQr>
+            <ns3:FlangeHeigthSh ns3:unit="mm">28</ns3:FlangeHeigthSh>
+          </ns3:Wheel>
+        </ns3:WheelCollection>
+        <ns3:BearingHousingCollection>
+          <ns3:BearingHousing ns3:differentiator="Side"><ns3:Side ns3:type="Side">A</ns3:Side></ns3:BearingHousing>
+          <ns3:BearingHousing ns3:differentiator="Side"><ns3:Side ns3:type="Side">B</ns3:Side></ns3:BearingHousing>
+        </ns3:BearingHousingCollection>
+        <ns3:BearingCollection>
+          <ns3:Bearing ns3:differentiator="Position"><ns3:Position ns3:type="BearingPosition">Innen A</ns3:Position></ns3:Bearing>
+          <ns3:Bearing ns3:differentiator="Position"><ns3:Position ns3:type="BearingPosition">Außen A</ns3:Position></ns3:Bearing>
+          <ns3:Bearing ns3:differentiator="Position"><ns3:Position ns3:type="BearingPosition">Innen B</ns3:Position></ns3:Bearing>
+          <ns3:Bearing ns3:differentiator="Position"><ns3:Position ns3:type="BearingPosition">Außen B</ns3:Position></ns3:Bearing>
+        </ns3:BearingCollection>
+        <ns3:Wheelsetnumber>8000181630</ns3:Wheelsetnumber>
+        <ns3:ArDimension ns3:unit="mm">1594.15</ns3:ArDimension>
+        <ns3:SrMass ns3:unit="mm">1594.15</ns3:SrMass>
+        <ns3:WheelsetType ns3:type="WheelsetType">ES3</ns3:WheelsetType>
+        <ns3:EigentumsmerkmalRadsatz ns3:type="ListEigentumsmerkmal">VTG Rail Europe GmbH</ns3:EigentumsmerkmalRadsatz>
+        <ns3:IsMaintenanceLevel ns3:type="MaintenanceLevel">IS 1</ns3:IsMaintenanceLevel>
+        <ns3:WheelsetCaseType ns3:type="WheelsetBearingHousingType">UIC</ns3:WheelsetCaseType>
+        <ns3:MaximumLoad ns3:type="MaximalWheelsetLoad">22.5</ns3:MaximumLoad>
+        <ns3:State ns3:type="WheelsetCondition">Einsatzfähig</ns3:State>
+        <ns3:TsiApproval>true</ns3:TsiApproval>
+        <ns3:GreenDotMarking>false</ns3:GreenDotMarking>
+        <ns3:HasZfPA>false</ns3:HasZfPA>
+        <ns3:HasZfPS>false</ns3:HasZfPS>
+        <ns3:HasZfPE>false</ns3:HasZfPE>
+        <ns3:ZfPE1Marking>false</ns3:ZfPE1Marking>
+      </ns4:technicalWheelsetOutgoing>
+    </Radsatz>
+  </Body>
+</VPI_Data_Exchange>

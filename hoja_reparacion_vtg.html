@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Hoja de Reparación de Eje Completo — VTG</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #ffffff;
+      --bg2: #f5f5f4;
+      --bg3: #eeece8;
+      --text: #1a1a18;
+      --text2: #5f5e5a;
+      --text3: #9e9c96;
+      --border: rgba(0, 0, 0, 0.12);
+      --border2: rgba(0, 0, 0, 0.22);
+      --info-bg: #e6f1fb;
+      --info-text: #0c447c;
+      --info-border: #85b7eb;
+      --success-bg: #eaf3de;
+      --success-text: #27500a;
+      --success-border: #97c459;
+      --danger-bg: #fcebeb;
+      --danger-text: #791f1f;
+      --danger-border: #f09595;
+      --warning-bg: #faeeda;
+      --warning-text: #633806;
+      --warning-border: #ef9f27;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1e1e1c;
+        --bg2: #2a2a28;
+        --bg3: #333330;
+        --text: #e8e6e0;
+        --text2: #a8a69e;
+        --text3: #6e6c66;
+        --border: rgba(255, 255, 255, 0.1);
+        --border2: rgba(255, 255, 255, 0.2);
+        --info-bg: #042c53;
+        --info-text: #b5d4f4;
+        --info-border: #185fa5;
+        --success-bg: #173404;
+        --success-text: #c0dd97;
+        --success-border: #3b6d11;
+        --danger-bg: #501313;
+        --danger-text: #f7c1c1;
+        --danger-border: #a32d2d;
+        --warning-bg: #412402;
+        --warning-text: #fac775;
+        --warning-border: #854f0b;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg3);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px;
+      font-size: 16px;
+    }
+
+    /* HEADER */
+    .app-header {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+
+    .app-header h1 {
+      font-size: 17px;
+      font-weight: 500;
+    }
+
+    .app-header .meta {
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 4px;
+      display: flex;
+      gap: 16px;
+    }
+
+    .draft-bar {
+      font-size: 12px;
+      color: var(--text3);
+      text-align: center;
+      padding: 4px 0 8px;
+      min-height: 24px;
+    }
+
+    /* NAV */
+    .step-nav {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px 16px;
+      margin-bottom: 12px;
+    }
+
+    .step-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+
+    .step-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border2);
+      transition: all 0.2s;
+      flex: 1;
+    }
+
+    .dot.active {
+      background: var(--text);
+    }
+
+    .dot.done {
+      background: var(--success-border);
+    }
+
+    /* SECTIONS */
+    .section-view {
+      display: none;
+    }
+
+    .section-view.active {
+      display: block;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+    }
+
+    /* FIELDS */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .field label {
+      font-size: 12px;
+      color: var(--text2);
+      font-weight: 500;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 0.5px solid var(--border2);
+      border-radius: var(--radius);
+      font-size: 16px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--info-border);
+    }
+
+    .field input.val-ok {
+      border-color: var(--success-border);
+      background: var(--success-bg);
+    }
+
+    .field input.val-error {
+      border-color: var(--danger-border);
+      background: var(--danger-bg);
+    }
+
+    .field .limit-hint {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 2px;
+    }
+
+    .field .error-msg {
+      font-size: 11px;
+      color: var(--danger-text);
+      margin-top: 2px;
+      display: none;
+    }
+
+    .field input.val-error~.error-msg {
+      display: block;
+    }
+
+    .field input.val-error~.limit-hint {
+      display: none;
+    }
+
+    /* GRIDS */
+    .g2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .g3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .g4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 600px) {
+
+      .g3,
+      .g4 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 420px) {
+
+      .g2,
+      .g3,
+      .g4 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* TRABAJOS REALIZADOS */
+    .trabajo-item {
+      background: var(--bg2);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .trabajo-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .trabajo-check {
+      width: 28px;
+      height: 28px;
+      border: 0.5px solid var(--border2);
+      border-radius: 6px;
+      background: var(--bg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--success-text);
+      flex-shrink: 0;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .trabajo-check.checked {
+      background: var(--success-bg);
+      border-color: var(--success-border);
+    }
+
+    .trabajo-code {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--info-text);
+      background: var(--info-bg);
+      padding: 3px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .trabajo-desc {
+      font-size: 14px;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .trabajo-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .trabajo-fields input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 0.5px solid var(--border2);
+      border-radius: var(--radius);
+      font-size: 15px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      -webkit-appearance: none;
+    }
+
+    .trabajo-fields input:focus {
+      outline: none;
+      border-color: var(--info-border);
+    }
+
+    .trabajo-lbl {
+      font-size: 11px;
+      color: var(--text2);
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+
+    /* TOGGLE BUTTONS */
+    .toggle-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .tog-btn {
+      padding: 12px 16px;
+      border: 0.5px solid var(--border2);
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .tog-btn.active {
+      border-color: var(--info-border);
+      background: var(--info-bg);
+      color: var(--info-text);
+      font-weight: 500;
+    }
+
+    .tog-btn.active-ok {
+      border-color: var(--success-border);
+      background: var(--success-bg);
+      color: var(--success-text);
+      font-weight: 500;
+    }
+
+    .tog-btn.active-warn {
+      border-color: var(--warning-border);
+      background: var(--warning-bg);
+      color: var(--warning-text);
+      font-weight: 500;
+    }
+
+    .tog-btn.active-danger {
+      border-color: var(--danger-border);
+      background: var(--danger-bg);
+      color: var(--danger-text);
+      font-weight: 500;
+    }
+
+    /* MEDICIONES TABLA */
+    .med-group {
+      background: var(--bg2);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .med-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .med-limit {
+      font-size: 11px;
+      color: var(--text3);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .med-cols {
+      display: grid;
+      gap: 8px;
+    }
+
+    .med-side-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text2);
+      margin-bottom: 4px;
+    }
+
+    .med-input {
+      width: 100%;
+      padding: 12px 13px;
+      border: 0.5px solid var(--border2);
+      border-radius: var(--radius);
+      font-size: 17px;
+      font-weight: 500;
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      -webkit-appearance: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .med-input:focus {
+      outline: none;
+      border-color: var(--info-border);
+    }
+
+    .med-input.val-ok {
+      border-color: var(--success-border);
+      background: var(--success-bg);
+    }
+
+    .med-input.val-error {
+      border-color: var(--danger-border);
+      background: var(--danger-bg);
+      color: var(--danger-text);
+    }
+
+    .warn-msg {
+      font-size: 12px;
+      color: var(--danger-text);
+      margin-top: 6px;
+      display: none;
+      font-weight: 500;
+    }
+
+    /* TABLA LIMITES */
+    .lim-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin: 8px 0 12px;
+    }
+
+    .lim-table th {
+      background: var(--bg3);
+      color: var(--text2);
+      font-weight: 500;
+      padding: 5px 8px;
+      border: 0.5px solid var(--border);
+      text-align: center;
+    }
+
+    .lim-table td {
+      padding: 5px 8px;
+      border: 0.5px solid var(--border);
+      text-align: center;
+      color: var(--text2);
+    }
+
+    .lim-table td.hl {
+      color: var(--info-text);
+      font-weight: 500;
+      background: var(--info-bg);
+    }
+
+    /* RESUMEN */
+    .summary-section {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text3);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin: 16px 0 6px;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .summary-table td {
+      padding: 7px 0;
+      border-bottom: 0.5px solid var(--border);
+      vertical-align: top;
+    }
+
+    .summary-table td:first-child {
+      color: var(--text2);
+      width: 50%;
+      padding-right: 10px;
+    }
+
+    .summary-table td.sok {
+      color: var(--success-text);
+    }
+
+    .summary-table td.serr {
+      color: var(--danger-text);
+      font-weight: 500;
+    }
+
+    /* NAV BUTTONS */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0 4px;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 14px 20px;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 0.5px solid var(--border2);
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      transition: all 0.15s;
+      min-width: 110px;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:hover {
+      background: var(--bg2);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn.primary {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .btn.primary:hover {
+      opacity: 0.85;
+    }
+
+    .btn.primary:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn.success {
+      background: var(--success-bg);
+      color: var(--success-text);
+      border-color: var(--success-border);
+    }
+
+    /* ALERT */
+    .alert {
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 13px;
+      margin-bottom: 12px;
+      border: 0.5px solid;
+    }
+
+    .alert.warning {
+      background: var(--warning-bg);
+      color: var(--warning-text);
+      border-color: var(--warning-border);
+    }
+
+    .alert.danger {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+      border-color: var(--danger-border);
+    }
+
+    /* SENT VIEW */
+    #sent-view {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    #sent-view .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--success-bg);
+      border: 0.5px solid var(--success-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 28px;
+    }
+
+    #sent-view h2 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    #sent-view p {
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+
+    .sent-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 14px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app-header">
+    <h1>Hoja de Reparación de Eje Completo</h1>
+    <div class="meta">
+      <span>VTG Rail Europe GmbH</span>
+      <span>Taller: V-REQ (131)</span>
+      <span id="header-eje">—</span>
+    </div>
+  </div>
+
+  <div class="draft-bar" id="draft-bar"></div>
+
+  <div class="step-nav">
+    <div class="step-label" id="step-label">Paso 1 de 6</div>
+    <div class="step-dots" id="dots"></div>
+  </div>
+
+  <div id="main-form">
+
+    <!-- ══════════════════════════════════
+     PASO 1 — IDENTIFICACIÓN
+══════════════════════════════════ -->
+    <div id="sec0" class="section-view active">
+      <div class="card">
+        <div class="card-title">Identificación del eje</div>
+        <div class="g2">
+          <div class="field"><label>Número del eje completo</label><input type="text" id="num_eje"
+              placeholder="Ej: 8000181630" oninput="autosave();updateHeader()"></div>
+          <div class="field"><label>Número de pedido</label><input type="text" id="num_pedido"
+              placeholder="Ej: DM25-757" oninput="autosave()"></div>
+        </div>
+        <div class="g2">
+          <div class="field"><label>Número de pedido del cliente</label><input type="text" id="num_pedido_cliente"
+              placeholder="Ej: 4510024777" oninput="autosave()"></div>
+          <div class="field"><label>Fecha de creación</label><input type="date" id="fecha_creacion"
+              oninput="autosave()"></div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Datos del eje</div>
+        <div class="g2">
+          <div class="field"><label>Tipo del eje completo</label><input type="text" id="tipo_eje" placeholder="Ej: ES3"
+              oninput="autosave()"></div>
+          <div class="field"><label>Número de eje</label><input type="text" id="num_eje_cuerpo" placeholder="Número"
+              oninput="autosave()"></div>
+        </div>
+        <div class="g3">
+          <div class="field"><label>Fabricante de eje</label><input type="text" id="fab_eje" placeholder="Ej: MAST."
+              oninput="autosave()"></div>
+          <div class="field"><label>Año de fabricación de eje</label><input type="text" id="anio_fab_eje"
+              placeholder="Ej: 2022" inputmode="numeric" oninput="autosave()"></div>
+          <div class="field"><label>Material de eje</label><input type="text" id="mat_eje" placeholder="Ej: EA1N"
+              oninput="autosave()"></div>
+        </div>
+        <div class="g3">
+          <div class="field"><label>Lote de colada</label><input type="text" id="lote_colada_eje" oninput="autosave()">
+          </div>
+          <div class="field"><label>Identificación propietario</label><input type="text" id="prop_eje"
+              placeholder="Ej: VTG" oninput="autosave()"></div>
+          <div class="field"><label>Carga por eje permitida [t]</label><input type="text" id="carga_eje"
+              placeholder="Ej: 22,5" inputmode="decimal" oninput="autosave()"></div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Datos del vagón</div>
+        <div class="g2">
+          <div class="field"><label>Programa de mantenimiento</label><input type="text" id="prog_mant"
+              oninput="autosave()"></div>
+          <div class="field"><label>Número eje completo (vagón)</label><input type="text" id="num_eje_vagon"
+              oninput="autosave()"></div>
+        </div>
+        <div class="g3">
+          <div class="field"><label>Desmontado del vagón</label><input type="text" id="vagon_desmontado"
+              oninput="autosave()"></div>
+          <div class="field"><label>Montado en el vagón</label><input type="text" id="vagon_montado"
+              oninput="autosave()"></div>
+          <div class="field"><label>Motivo de desmontaje</label><input type="text" id="motivo_desmontaje"
+              oninput="autosave()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+     PASO 2 — TRABAJOS REALIZADOS
+══════════════════════════════════ -->
+    <div id="sec1" class="section-view">
+      <div class="card">
+        <div class="card-title">Nivel de mantenimiento</div>
+        <div class="toggle-group" id="nivel-mant">
+          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IS 0</div>
+          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IL</div>
+          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IS 1</div>
+          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IS 2</div>
+          <div class="tog-btn" onclick="toggleSingle(this,'nivel_mant')">IS 3</div>
+        </div>
+        <input type="hidden" id="nivel_mant">
+      </div>
+
+      <div class="card">
+        <div class="card-title">Trabajos realizados</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:12px">Marca cada trabajo completado e indica fecha y
+          empleado responsable.</p>
+
+        <div id="trabajos-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Observaciones y/o defectos</div>
+        <div class="field">
+          <textarea id="observaciones" rows="3" placeholder="Ej: FAG. Rodamientos nuevos..."
+            oninput="autosave()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+     PASO 3 — DATOS DE RUEDAS
+══════════════════════════════════ -->
+    <div id="sec2" class="section-view">
+      <div class="card">
+        <div class="card-title">Tipo de eje y ruedas</div>
+        <div class="g3">
+          <div class="field"><label>Tipo de rueda</label><input type="text" id="tipo_rueda" placeholder="Ej: ER7"
+              oninput="autosave()"></div>
+          <div class="field"><label>Material de rueda</label><input type="text" id="mat_rueda" oninput="autosave()">
+          </div>
+          <div class="field"><label>Tipo de caja de grasa</label><input type="text" id="tipo_caja_grasa"
+              oninput="autosave()"></div>
+        </div>
+        <div class="g3">
+          <div class="field">
+            <label>Tipo de rodamiento</label>
+            <div class="toggle-group" style="margin-top:4px" id="tipo-rod-grp">
+              <div class="tog-btn" onclick="toggleSingle(this,'tipo_rodamiento')">Cil.</div>
+              <div class="tog-btn" onclick="toggleSingle(this,'tipo_rodamiento')">Rótula</div>
+            </div>
+            <input type="hidden" id="tipo_rodamiento">
+          </div>
+          <div class="field"><label>Tipo de eje completo</label><input type="text" id="tipo_eje_completo"
+              placeholder="Ej: ES3" oninput="autosave()"></div>
+          <div class="field"><label>Antigua red ferroviaria estatal</label><input type="text" id="red_ferroviaria"
+              oninput="autosave()"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Rueda — Lado A</div>
+        <div class="g3">
+          <div class="field"><label>Fabricante de la rueda</label><input type="text" id="fab_rueda_a"
+              placeholder="Ej: MG" oninput="autosave()"></div>
+          <div class="field"><label>Año de fabricación</label><input type="text" id="anio_rueda_a"
+              placeholder="Ej: 2022" inputmode="numeric" oninput="autosave()"></div>
+          <div class="field"><label>Lote de colada</label><input type="text" id="colada_rueda_a" oninput="autosave()">
+          </div>
+        </div>
+        <div class="field"><label>AR1/AR2</label><input type="text" id="ar_a" oninput="autosave()"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Rueda — Lado B</div>
+        <div class="g3">
+          <div class="field"><label>Fabricante de la rueda</label><input type="text" id="fab_rueda_b"
+              placeholder="Ej: MG" oninput="autosave()"></div>
+          <div class="field"><label>Año de fabricación</label><input type="text" id="anio_rueda_b"
+              placeholder="Ej: 2022" inputmode="numeric" oninput="autosave()"></div>
+          <div class="field"><label>Lote de colada</label><input type="text" id="colada_rueda_b" oninput="autosave()">
+          </div>
+        </div>
+        <div class="field"><label>AR1/AR2</label><input type="text" id="ar_b" oninput="autosave()"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+     PASO 4 — MEDICIONES
+══════════════════════════════════ -->
+    <div id="sec3" class="section-view">
+
+      <div class="card">
+        <div class="card-title">Tabla de límites de referencia</div>
+        <table class="lim-table">
+          <tr>
+            <th>Medida</th>
+            <th>Límite</th>
+          </tr>
+          <tr>
+            <td>Espesor Sd (840&lt;dM&lt;1000mm)</td>
+            <td>&lt; 25 mm</td>
+          </tr>
+          <tr>
+            <td>Diferencia Sd entre ruedas</td>
+            <td>&gt; 2 mm</td>
+          </tr>
+          <tr>
+            <td>Altura pestaña Sh</td>
+            <td>&gt; 34 mm</td>
+          </tr>
+          <tr>
+            <td>Diferencia Sh entre ruedas</td>
+            <td>&gt; 1 mm</td>
+          </tr>
+          <tr>
+            <td>Cara pestaña qR</td>
+            <td>&lt; 7,5 mm</td>
+          </tr>
+          <tr>
+            <td>SR (distancia entre caras)</td>
+            <td>Límite reparación: 1659</td>
+          </tr>
+          <tr>
+            <td>AR (dist. caras activas)</td>
+            <td>1594 mm (mín. 1594, máx. 1596)</td>
+          </tr>
+          <tr>
+            <td>AR1/AR2</td>
+            <td>797 mm (máx. 798)</td>
+          </tr>
+          <tr>
+            <td>C-C'</td>
+            <td>Máx. 2 mm</td>
+          </tr>
+          <tr>
+            <td>ddM (ovalización)</td>
+            <td>Máx. 0,3 mm</td>
+          </tr>
+          <tr>
+            <td>G (alabeo fuste)</td>
+            <td>Máx. 1 mm</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Sd -->
+      <div class="med-group">
+        <div class="med-title">Sd — Espesor de pestaña</div>
+        <span class="med-limit">Límite: &lt; 25 mm (para 840&lt;dM&lt;1000mm) | Diferencia máx. entre ruedas: &gt; 2
+          mm</span>
+        <div class="g2" style="margin-bottom:8px">
+          <div>
+            <div class="med-side-label">Lado A — Antes</div>
+            <input class="med-input" type="number" step="0.1" inputmode="decimal" id="sd_a_ant" placeholder="mm"
+              oninput="checkMedVtg(this,'sd')">
+          </div>
+          <div>
+            <div class="med-side-label">Lado A — Después</div>
+            <input class="med-input" type="number" step="0.1" inputmode="decimal" id="sd_a_dep" placeholder="mm"
+              oninput="checkMedVtg(this,'sd')">
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Lado B — Antes</div>
+            <input class="med-input" type="number" step="0.1" inputmode="decimal" id="sd_b_ant" placeholder="mm"
+              oninput="checkMedVtg(this,'sd')">
+          </div>
+          <div>
+            <div class="med-side-label">Lado B — Después</div>
+            <input class="med-input" type="number" step="0.1" inputmode="decimal" id="sd_b_dep" placeholder="mm"
+              oninput="checkMedVtg(this,'sd')">
+          </div>
+        </div>
+        <div class="warn-msg" id="warn_sd">⚠ Valor fuera de límite en Sd</div>
+      </div>
+
+      <!-- Sh -->
+      <div class="med-group">
+        <div class="med-title">Sh — Altura de pestaña</div>
+        <span class="med-limit">Límite: &gt; 34 mm | Diferencia máx. entre ruedas: &gt; 1 mm</span>
+        <div class="g2" style="margin-bottom:8px">
+          <div>
+            <div class="med-side-label">Lado A — Antes</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="sh_a_ant" placeholder="mm" oninput="checkMedVtg(this,'sh')">
+          </div>
+          <div>
+            <div class="med-side-label">Lado A — Después</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="sh_a_dep" placeholder="mm" oninput="checkMedVtg(this,'sh')">
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Lado B — Antes</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="sh_b_ant" placeholder="mm" oninput="checkMedVtg(this,'sh')">
+          </div>
+          <div>
+            <div class="med-side-label">Lado B — Después</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="sh_b_dep" placeholder="mm" oninput="checkMedVtg(this,'sh')">
+          </div>
+        </div>
+        <div class="warn-msg" id="warn_sh">⚠ Valor fuera de límite en Sh</div>
+      </div>
+
+      <!-- qR -->
+      <div class="med-group">
+        <div class="med-title">qR — Cara de la pestaña</div>
+        <span class="med-limit">Límite: &lt; 7,5 mm</span>
+        <div class="g2" style="margin-bottom:8px">
+          <div>
+            <div class="med-side-label">Lado A — Antes</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="qr_a_ant" placeholder="mm" oninput="checkMedVtg(this,'qr')">
+          </div>
+          <div>
+            <div class="med-side-label">Lado A — Después</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="qr_a_dep" placeholder="mm" oninput="checkMedVtg(this,'qr')">
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Lado B — Antes</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="qr_b_ant" placeholder="mm" oninput="checkMedVtg(this,'qr')">
+          </div>
+          <div>
+            <div class="med-side-label">Lado B — Después</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="qr_b_dep" placeholder="mm" oninput="checkMedVtg(this,'qr')">
+          </div>
+        </div>
+        <div class="warn-msg" id="warn_qr">⚠ Valor fuera de límite en qR</div>
+      </div>
+
+      <!-- Anchura de llanta -->
+      <div class="med-group">
+        <div class="med-title">Anchura de llanta</div>
+        <div class="g2" style="margin-bottom:8px">
+          <div>
+            <div class="med-side-label">Lado A — Antes</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="llanta_a_ant" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Lado A — Después</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="llanta_a_dep" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Lado B — Antes</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="llanta_b_ant" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Lado B — Después</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="llanta_b_dep" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Ø Banda rodadura -->
+      <div class="med-group">
+        <div class="med-title">Ø Banda rodadura</div>
+        <div class="g2" style="margin-bottom:8px">
+          <div>
+            <div class="med-side-label">Lado A — Antes</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="rod_a_ant" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Lado A — Después</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="rod_a_dep" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Lado B — Antes</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="rod_b_ant" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Lado B — Después</div><input class="med-input" type="number" step="0.1"
+              inputmode="decimal" id="rod_b_dep" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Ovalización y Alabeo -->
+      <div class="med-group">
+        <div class="med-title">Ovalización</div>
+        <span class="med-limit">ddM máx: 0,3 mm</span>
+        <div class="g2" style="margin-bottom:8px">
+          <div>
+            <div class="med-side-label">Lado A — Antes</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="oval_a_ant" placeholder="mm" oninput="checkMedVtg(this,'oval')">
+          </div>
+          <div>
+            <div class="med-side-label">Lado A — Después</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="oval_a_dep" placeholder="mm" oninput="checkMedVtg(this,'oval')">
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Lado B — Antes</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="oval_b_ant" placeholder="mm" oninput="checkMedVtg(this,'oval')">
+          </div>
+          <div>
+            <div class="med-side-label">Lado B — Después</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="oval_b_dep" placeholder="mm" oninput="checkMedVtg(this,'oval')">
+          </div>
+        </div>
+        <div class="warn-msg" id="warn_oval">⚠ Ovalización supera 0,3 mm</div>
+      </div>
+
+      <div class="med-group">
+        <div class="med-title">Alabeo</div>
+        <div class="g2" style="margin-bottom:8px">
+          <div>
+            <div class="med-side-label">Lado A — Antes</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="alabeo_a_ant" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Lado A — Después</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="alabeo_a_dep" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Lado B — Antes</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="alabeo_b_ant" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Lado B — Después</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="alabeo_b_dep" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Alabeo mangueta -->
+      <div class="med-group">
+        <div class="med-title">Alabeo mangueta ¹</div>
+        <span class="med-limit">¹ Medir únicamente si no gira sobre las manguetas</span>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Lado A</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="alabeo_mang_a" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Lado B</div><input class="med-input" type="number" step="0.01"
+              inputmode="decimal" id="alabeo_mang_b" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+     PASO 5 — MANGUETAS, RODAMIENTOS Y GRASA
+══════════════════════════════════ -->
+    <div id="sec4" class="section-view">
+
+      <!-- Manguetas y pista -->
+      <div class="card">
+        <div class="card-title">Manguetas (Ø Mangueta y Ø Pista interior)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+          <div>
+            <div class="med-side-label">A — Delante</div><input class="med-input" type="number" step="0.001"
+              inputmode="decimal" id="mang_a_del" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">A — Detrás</div><input class="med-input" type="number" step="0.001"
+              inputmode="decimal" id="mang_a_det" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">B — Delante</div><input class="med-input" type="number" step="0.001"
+              inputmode="decimal" id="mang_b_del" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">B — Detrás</div><input class="med-input" type="number" step="0.001"
+              inputmode="decimal" id="mang_b_det" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+          <div>
+            <div class="med-side-label">Pista A — Delante</div><input class="med-input" type="number" step="0.001"
+              inputmode="decimal" id="pista_a_del" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Pista A — Detrás</div><input class="med-input" type="number" step="0.001"
+              inputmode="decimal" id="pista_a_det" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Pista B — Delante</div><input class="med-input" type="number" step="0.001"
+              inputmode="decimal" id="pista_b_del" placeholder="mm" oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">Pista B — Detrás</div><input class="med-input" type="number" step="0.001"
+              inputmode="decimal" id="pista_b_det" placeholder="mm" oninput="autosave()">
+          </div>
+        </div>
+        <div class="g2">
+          <div class="field"><label>Valor contracción A (mm)</label><input type="number" step="0.01" inputmode="decimal"
+              id="contrac_a" placeholder="mm" oninput="autosave()"></div>
+          <div class="field"><label>Valor contracción B (mm)</label><input type="number" step="0.01" inputmode="decimal"
+              id="contrac_b" placeholder="mm" oninput="autosave()"></div>
+        </div>
+      </div>
+
+      <!-- SR, AR, C-C', Alabeo fuste -->
+      <div class="card">
+        <div class="card-title">Mediciones generales del eje</div>
+        <div class="g2" style="margin-bottom:10px">
+          <div>
+            <div class="med-side-label">SR — Antes</div>
+            <input class="med-input" type="number" step="0.01" inputmode="decimal" id="sr_ant" placeholder="mm"
+              oninput="autosave()">
+          </div>
+          <div>
+            <div class="med-side-label">SR — Después</div>
+            <input class="med-input" type="number" step="0.01" inputmode="decimal" id="sr_dep" placeholder="mm"
+              oninput="autosave()">
+          </div>
+        </div>
+        <div class="warn-msg" id="warn_sr">⚠ SR supera el límite de reparación (1659 mm)</div>
+        <div class="g2" style="margin-bottom:10px">
+          <div>
+            <div class="med-side-label">AR — Antes</div>
+            <input class="med-input" type="number" step="0.01" inputmode="decimal" id="ar_ant" placeholder="mm"
+              oninput="checkMedVtg(this,'ar')">
+          </div>
+          <div>
+            <div class="med-side-label">AR — Después</div>
+            <input class="med-input" type="number" step="0.01" inputmode="decimal" id="ar_dep" placeholder="mm"
+              oninput="checkMedVtg(this,'ar')">
+          </div>
+        </div>
+        <div class="g2" style="margin-bottom:10px">
+          <div>
+            <div class="med-side-label">C-C' — Antes</div>
+            <input class="med-input" type="number" step="0.01" inputmode="decimal" id="cc_ant" placeholder="mm"
+              oninput="checkMedVtg(this,'cc')">
+          </div>
+          <div>
+            <div class="med-side-label">C-C' — Después</div>
+            <input class="med-input" type="number" step="0.01" inputmode="decimal" id="cc_dep" placeholder="mm"
+              oninput="checkMedVtg(this,'cc')">
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="med-side-label">Alabeo fuste — Antes</div>
+            <input class="med-input" type="number" step="0.01" inputmode="decimal" id="alabeo_fuste_ant"
+              placeholder="mm" oninput="checkMedVtg(this,'alabeo_fuste')">
+          </div>
+          <div>
+            <div class="med-side-label">Alabeo fuste — Después</div>
+            <input class="med-input" type="number" step="0.01" inputmode="decimal" id="alabeo_fuste_dep"
+              placeholder="mm" oninput="checkMedVtg(this,'alabeo_fuste')">
+          </div>
+        </div>
+        <div class="warn-msg" id="warn_ar">⚠ AR fuera del rango 1594–1596 mm</div>
+        <div class="warn-msg" id="warn_cc">⚠ C-C' supera 2 mm</div>
+        <div class="warn-msg" id="warn_alabeo_fuste">⚠ Alabeo fuste supera 1 mm</div>
+      </div>
+
+      <!-- Rodamientos -->
+      <div class="card">
+        <div class="card-title">Rodamientos</div>
+        <div class="g2">
+          <div class="field"><label>Fabricante de rodamiento</label><input type="text" id="fab_rod"
+              placeholder="Ej: KINGY" oninput="autosave()"></div>
+          <div class="field"><label>Año de fabricación rodamiento</label><input type="text" id="anio_rod"
+              inputmode="numeric" oninput="autosave()"></div>
+        </div>
+        <div class="g2">
+          <div class="field"><label>Reequipador de jaula</label><input type="text" id="reequip_jaula"
+              oninput="autosave()"></div>
+          <div class="field"><label>Año de fabricación de jaula</label><input type="text" id="anio_jaula"
+              inputmode="numeric" oninput="autosave()"></div>
+        </div>
+        <div class="g2">
+          <div class="field"><label>Pista interior, fabricante</label><input type="text" id="pista_fab"
+              oninput="autosave()"></div>
+          <div class="field"><label>Pista interior, año fabricación</label><input type="text" id="pista_anio"
+              inputmode="numeric" oninput="autosave()"></div>
+        </div>
+        <div class="field" style="margin-top:4px">
+          <label>Tipo de jaula</label>
+          <div class="toggle-group" id="tipo-jaula-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_jaula')">N — Latón con pasadores</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_jaula')">M — Latón maciza</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_jaula')">K — Plástico</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_jaula')">S — Acero</div>
+          </div>
+          <input type="hidden" id="tipo_jaula">
+        </div>
+      </div>
+
+      <!-- Grasa -->
+      <div class="card">
+        <div class="card-title">Grasa y pintura</div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Tipo de grasa</label>
+          <div class="toggle-group" id="tipo-grasa-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_grasa')">S3 EUFR</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_grasa')">S4 EUDB</div>
+          </div>
+          <input type="hidden" id="tipo_grasa">
+        </div>
+        <div class="g3">
+          <div class="field"><label>Grasa lote</label><input type="text" id="grasa_lote" oninput="autosave()"></div>
+          <div class="field"><label>Fecha fab. grasa</label><input type="text" id="grasa_fecha"
+              placeholder="Ej: SEP2025" oninput="autosave()"></div>
+          <div class="field">
+            <label>Perfil</label>
+            <div class="toggle-group" id="perfil-grp">
+              <div class="tog-btn" onclick="toggleSingle(this,'perfil')">S1002 15%</div>
+            </div>
+            <input type="hidden" id="perfil">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Denominación</label>
+          <div class="toggle-group" id="denom-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'denominacion')">BD 18</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'denominacion')">Ep.2001</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'denominacion')">SEB 9305</div>
+          </div>
+          <input type="hidden" id="denominacion">
+        </div>
+        <div class="field">
+          <label>Color [RAL]</label>
+          <div class="toggle-group" id="color-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'color_ral')">5011</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'color_ral')">9005</div>
+          </div>
+          <input type="hidden" id="color_ral">
+        </div>
+      </div>
+
+      <!-- Ensayos -->
+      <div class="card">
+        <div class="card-title">Ensayos no destructivos</div>
+        <div class="g2" style="margin-bottom:12px">
+          <div class="field"><label>Rueda A [MPA]</label><input type="number" step="1" inputmode="numeric" id="mpa_a"
+              placeholder="Ej: -85" oninput="autosave()"></div>
+          <div class="field"><label>Rueda B [MPA]</label><input type="number" step="1" inputmode="numeric" id="mpa_b"
+              placeholder="Ej: -80" oninput="autosave()"></div>
+        </div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Rueda A — resultado velo MT</label>
+          <div class="toggle-group" id="velo-a-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'velo_a')">Sin resultados</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'velo_a')">Con resultados aceptables</div>
+          </div>
+          <input type="hidden" id="velo_a">
+        </div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Rueda B — resultado velo MT</label>
+          <div class="toggle-group" id="velo-b-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'velo_b')">Sin resultados</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'velo_b')">Con resultados aceptables</div>
+          </div>
+          <input type="hidden" id="velo_b">
+        </div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Tipo de inspección</label>
+          <div class="toggle-group" id="tipo-insp-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Inspección inicial</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Parcial</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Repet.</div>
+          </div>
+          <input type="hidden" id="tipo_inspeccion">
+        </div>
+        <div class="field">
+          <label>Clase de fallo</label>
+          <div class="toggle-group" id="clase-fallo-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F1</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F2</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F3</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F4</div>
+          </div>
+          <input type="hidden" id="clase_fallo">
+        </div>
+        <div class="field" style="margin-top:10px"><label>EM [año]</label><input type="text" id="em_anio"
+            inputmode="numeric" oninput="autosave()"></div>
+      </div>
+
+      <!-- Historial mantenimiento -->
+      <div class="card">
+        <div class="card-title">Historial de mantenimiento anterior</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div class="field"><label>Nueva construcción — Fecha</label><input type="date" id="hist_nueva_fecha"
+              oninput="autosave()"></div>
+          <div class="field"><label>Nueva construcción — Taller</label><input type="text" id="hist_nueva_taller"
+              oninput="autosave()"></div>
+          <div></div>
+          <div class="field"><label>IS3 ant. — Fecha</label><input type="date" id="hist_is3_fecha" oninput="autosave()">
+          </div>
+          <div class="field"><label>IS3 ant. — Taller</label><input type="text" id="hist_is3_taller"
+              oninput="autosave()"></div>
+          <div></div>
+          <div class="field"><label>IS2 ant. — Fecha</label><input type="date" id="hist_is2_fecha" oninput="autosave()">
+          </div>
+          <div class="field"><label>IS2 ant. — Taller</label><input type="text" id="hist_is2_taller"
+              oninput="autosave()"></div>
+          <div></div>
+          <div class="field"><label>IS1 ant. — Fecha</label><input type="date" id="hist_is1_fecha" oninput="autosave()">
+          </div>
+          <div class="field"><label>IS1 ant. — Taller</label><input type="text" id="hist_is1_taller"
+              oninput="autosave()"></div>
+          <div></div>
+          <div class="field"><label>D ant. — Fecha</label><input type="date" id="hist_d_fecha" oninput="autosave()">
+          </div>
+          <div class="field"><label>D ant. — Taller</label><input type="text" id="hist_d_taller" oninput="autosave()">
+          </div>
+          <div></div>
+          <div class="field"><label>IL — Fecha</label><input type="date" id="hist_il_fecha" oninput="autosave()"></div>
+          <div class="field"><label>IL — Taller</label><input type="text" id="hist_il_taller" oninput="autosave()">
+          </div>
+          <div></div>
+          <div class="field"><label>3L — Fecha</label><input type="date" id="hist_3l_fecha" oninput="autosave()"></div>
+          <div class="field"><label>3L — Taller</label><input type="text" id="hist_3l_taller" oninput="autosave()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+     PASO 6 — RESUMEN Y CONFIRMACIÓN
+══════════════════════════════════ -->
+    <div id="sec5" class="section-view">
+      <div class="card">
+        <div id="summary-content"></div>
+      </div>
+      <div id="errors-box" style="display:none" class="alert warning">
+        ⚠ Hay valores fuera de límite. Revísalos antes de generar los documentos.
+      </div>
+      <div class="g2">
+        <div class="field"><label>Fecha de finalización</label><input type="date" id="fecha_fin" oninput="autosave()">
+        </div>
+        <div class="field"><label>Nombre trabajador responsable</label><input type="text" id="nombre_resp"
+            oninput="autosave()"></div>
+      </div>
+      <div class="g2" style="margin-top:8px">
+        <div class="field"><label>Fecha de montaje</label><input type="date" id="fecha_montaje" oninput="autosave()">
+        </div>
+        <div class="field"><label>Nombre responsable montaje</label><input type="text" id="nombre_montaje"
+            oninput="autosave()"></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn" onclick="goStep(4)" style="flex:1">Volver a editar</button>
+        <button class="btn success" id="btn-pdf" onclick="generarPDF()" style="flex:1">Descargar PDF</button>
+        <button class="btn primary" id="btn-xml" onclick="generarYDescargarXML()" style="flex:1">Descargar XML</button>
+      </div>
+    </div>
+
+  </div><!-- /main-form -->
+
+  <!-- SENT VIEW -->
+  <div id="sent-view">
+    <div class="icon">✓</div>
+    <h2>Documentos generados</h2>
+    <p id="sent-msg">El XML y el PDF han sido descargados.</p>
+    <p style="font-size:13px;color:var(--text3)">Sube el XML al portal de Hermes para completar el proceso.</p>
+    <div class="sent-btns">
+      <button class="btn" onclick="nuevaFicha()">Nueva ficha</button>
+      <button class="btn primary" onclick="generarYDescargarXML()">Descargar XML de nuevo</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-bar" id="nav-bar">
+    <button class="btn" id="btn-prev" onclick="prevStep()" style="visibility:hidden">Anterior</button>
+    <button class="btn primary" id="btn-next" onclick="nextStep()">Siguiente</button>
+  </div>
+
+  <script>
+    const STEPS = 6;
+    const STEP_NAMES = ['Identificación', 'Trabajos realizados', 'Datos de ruedas', 'Mediciones', 'Manguetas, rodamientos y grasa', 'Resumen'];
+    let currentStep = 0;
+    let fieldErrors = {};
+
+    const TRABAJOS = [
+      { code: 'A', desc: 'Ultrasonido del eje montado, fisuras en eje' },
+      { code: 'B', desc: 'Ultrasonido de llantas de rueda, fisuras transversales' },
+      { code: 'D', desc: 'Ultrasonido de llantas de rueda, tens. residual' },
+      { code: 'E', desc: 'Velo de rueda MT, fisuras' },
+      { code: 'EM', desc: 'Canal de descarga' },
+      { code: 'S', desc: 'Ensayo MT de mangueta' },
+      { code: 'W', desc: 'Ensayo MT del eje' },
+      { code: 'CL', desc: 'Clasificación nivel mant.' },
+      { code: 'IR', desc: 'Inspección rodamientos' },
+      { code: 'PT', desc: 'Perfil torneado' },
+      { code: 'MR', desc: 'Montaje rodamientos' },
+      { code: 'EP', desc: 'Eje protecc. anticorrosión' },
+    ];
+
+    const vtgLimits = {
+      sd:           { check: v => v >= 22 && v <= 35,    msg: 'Sd fuera de rango (22-35 mm)' },
+      sh:           { check: v => v >= 26 && v <= 36,    msg: 'Sh fuera de rango (26-36 mm)' },
+      qr:           { check: v => v >= 6 && v <= 13,     msg: 'qR fuera de rango (6-13 mm)' },
+      oval:         { check: v => v <= 0.3,              msg: 'Ovalización debe ser ≤ 0,3 mm' },
+      ar:           { check: v => v >= 1590 && v <= 1600, msg: 'AR debe estar entre 1590 y 1600 mm' },
+      cc:           { check: v => v <= 2,                msg: 'C-C\' debe ser ≤ 2 mm' },
+      alabeo_fuste: { check: v => v <= 1,                msg: 'Alabeo fuste debe ser ≤ 1 mm' },
+    };
+
+    function initTrabajos() {
+      const container = document.getElementById('trabajos-list');
+      TRABAJOS.forEach((t, i) => {
+        const id = 'trab_' + i;
+        const div = document.createElement('div');
+        div.className = 'trabajo-item';
+        div.innerHTML = `
+      <div class="trabajo-header">
+        <div class="trabajo-check" id="chk_${i}" onclick="toggleTrabajo(${i})">&nbsp;<\/div>
+        ${t.code ? `<span class="trabajo-code">${t.code}<\/span>` : ''}
+        <span class="trabajo-desc">${t.desc}<\/span>
+      <\/div>
+      <div class="trabajo-fields">
+        <div>
+          <div class="trabajo-lbl">Fecha<\/div>
+          <input type="date" id="trab_fecha_${i}" oninput="autosave()">
+        <\/div>
+        <div>
+          <div class="trabajo-lbl">Empleado<\/div>
+          <input type="text" id="trab_emp_${i}" placeholder="Nombre" oninput="autosave()">
+        <\/div>
+      <\/div>`;
+        container.appendChild(div);
+      });
+    }
+
+    function toggleTrabajo(i) {
+      const chk = document.getElementById('chk_' + i);
+      const checked = chk.classList.toggle('checked');
+      chk.textContent = checked ? '✓' : '\u00a0';
+      autosave();
+    }
+
+    function toggleSingle(el, hiddenId) {
+      const group = el.parentElement;
+      group.querySelectorAll('.tog-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById(hiddenId).value = el.textContent.trim();
+      autosave();
+    }
+
+    function checkMedVtg(inp, key) {
+      const v = parseFloat(inp.value);
+      inp.classList.remove('val-ok', 'val-error');
+      delete fieldErrors[inp.id];
+      if (!inp.value) { autosave(); return; }
+      if (vtgLimits[key]) {
+        const ok = vtgLimits[key].check(v);
+        inp.classList.add(ok ? 'val-ok' : 'val-error');
+        if (!ok) fieldErrors[inp.id] = vtgLimits[key].msg;
+        const warn = document.getElementById('warn_' + key);
+        if (warn) warn.style.display = !ok ? 'block' : 'none';
+      }
+      autosave();
+    }
+
+    function buildDots() {
+      const d = document.getElementById('dots');
+      d.innerHTML = '';
+      for (let i = 0; i < STEPS; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === currentStep ? ' active' : i < currentStep ? ' done' : '');
+        d.appendChild(dot);
+      }
+      document.getElementById('step-label').textContent = 'Paso ' + (currentStep + 1) + ' de ' + STEPS + ' — ' + STEP_NAMES[currentStep];
+    }
+
+    function showSection(n) {
+      document.querySelectorAll('.section-view').forEach((s, i) => s.classList.toggle('active', i === n));
+      document.getElementById('btn-prev').style.visibility = n === 0 ? 'hidden' : 'visible';
+      document.getElementById('btn-next').style.display = n === STEPS - 1 ? 'none' : '';
+      buildDots();
+      if (n === STEPS - 1) buildSummary();
+      window.scrollTo(0, 0);
+    }
+
+    function goStep(n) { currentStep = n; showSection(n); }
+    function nextStep() { if (currentStep < STEPS - 1) { currentStep++; showSection(currentStep); } }
+    function prevStep() { if (currentStep > 0) { currentStep--; showSection(currentStep); } }
+    function getVal(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+    function updateHeader() {
+      const n = getVal('num_eje');
+      document.getElementById('header-eje').textContent = n || '—';
+    }
+
+    function buildSummary() {
+      const hasErrors = Object.keys(fieldErrors).length > 0;
+      document.getElementById('errors-box').style.display = hasErrors ? 'block' : 'none';
+
+      const trabajosResumen = TRABAJOS.map((t, i) => {
+        const checked = document.getElementById('chk_' + i)?.classList.contains('checked');
+        if (!checked) return null;
+        const fecha = getVal('trab_fecha_' + i);
+        const emp = getVal('trab_emp_' + i);
+        return (t.code ? t.code + ' — ' : '') + t.desc + (fecha ? ' (' + fecha + ')' : '') + (emp ? ' / ' + emp : '');
+      }).filter(Boolean);
+
+      const secs = [
+        {
+          t: 'Identificación', r: [
+            ['Nº eje completo', getVal('num_eje')],
+            ['Nº pedido', getVal('num_pedido')],
+            ['Nº pedido cliente', getVal('num_pedido_cliente')],
+            ['Fecha creación', getVal('fecha_creacion')],
+            ['Tipo eje completo', getVal('tipo_eje')],
+            ['Fabricante eje', getVal('fab_eje')],
+            ['Año fab. eje', getVal('anio_fab_eje')],
+            ['Carga permitida', getVal('carga_eje') ? getVal('carga_eje') + ' t' : ''],
+            ['Propietario', getVal('prop_eje')],
+          ]
+        },
+        { t: 'Trabajos realizados', r: trabajosResumen.length ? trabajosResumen.map(s => ['', s]) : [['', 'Ninguno marcado']] },
+        { t: 'Nivel mantenimiento', r: [['Nivel', getVal('nivel_mant')]] },
+        {
+          t: 'Mediciones — después', r: [
+            ['Sd A', getVal('sd_a_dep') ? getVal('sd_a_dep') + ' mm' : '', 'sd_a_dep'],
+            ['Sd B', getVal('sd_b_dep') ? getVal('sd_b_dep') + ' mm' : '', 'sd_b_dep'],
+            ['Sh A', getVal('sh_a_dep') ? getVal('sh_a_dep') + ' mm' : '', 'sh_a_dep'],
+            ['Sh B', getVal('sh_b_dep') ? getVal('sh_b_dep') + ' mm' : '', 'sh_b_dep'],
+            ['qR A', getVal('qr_a_dep') ? getVal('qr_a_dep') + ' mm' : '', 'qr_a_dep'],
+            ['qR B', getVal('qr_b_dep') ? getVal('qr_b_dep') + ' mm' : '', 'qr_b_dep'],
+            ['AR', getVal('ar_dep') ? getVal('ar_dep') + ' mm' : '', 'ar_dep'],
+            ['C-C\'', getVal('cc_dep') ? getVal('cc_dep') + ' mm' : '', 'cc_dep'],
+            ['Alabeo fuste', getVal('alabeo_fuste_dep') ? getVal('alabeo_fuste_dep') + ' mm' : '', 'alabeo_fuste_dep'],
+          ]
+        },
+        {
+          t: 'Grasa y rodamientos', r: [
+            ['Tipo de grasa', getVal('tipo_grasa')],
+            ['Grasa lote', getVal('grasa_lote')],
+            ['Fecha fab. grasa', getVal('grasa_fecha')],
+            ['Perfil', getVal('perfil')],
+            ['Fabricante rodamiento', getVal('fab_rod')],
+            ['Tipo de jaula', getVal('tipo_jaula')],
+          ]
+        },
+        {
+          t: 'Cierre', r: [
+            ['Fecha finalización', getVal('fecha_fin')],
+            ['Responsable', getVal('nombre_resp')],
+            ['Fecha montaje', getVal('fecha_montaje')],
+            ['Responsable montaje', getVal('nombre_montaje')],
+          ]
+        },
+      ];
+
+      let html = '';
+      secs.forEach(sec => {
+        html += `<div class="summary-section">${sec.t}<\/div><table class="summary-table">`;
+        sec.r.forEach(([label, val, fid]) => {
+          const isErr = fid && fieldErrors[fid];
+          const cls = isErr ? 'serr' : val && val !== '—' ? 'sok' : '';
+          html += `<tr><td>${label}<\/td><td class="${cls}">${val || '—'}${isErr ? ' ⚠' : ''}<\/td><\/tr>`;
+        });
+        html += '<\/table>';
+      });
+      document.getElementById('summary-content').innerHTML = html;
+    }
+
+    // ── GENERAR XML VPI ──────────────────────────────────────────────
+    const VPI_CONFIG = {
+      sender: '124501',
+      receiver: '137101',
+      taller: 'V-REQ (131)',
+    };
+
+    function generarYDescargarXML() {
+      const ahora = new Date().toISOString();
+      const icr = Date.now().toString().slice(-6);
+      const numEje = getVal('num_eje') || '';
+      const fCaptura = getVal('fecha_fin') ? new Date(getVal('fecha_fin')).toISOString() : ahora;
+
+      const trabajosXml = TRABAJOS.map((t, i) => {
+        const checked = document.getElementById('chk_' + i)?.classList.contains('checked');
+        if (!checked) return '';
+        const fecha = getVal('trab_fecha_' + i);
+        const emp = getVal('trab_emp_' + i);
+        return `    <ns3:Activity ns3:code="${t.code || 'X'}" ns3:description="${t.desc}">
+      <ns3:Date>${fecha ? new Date(fecha).toISOString() : ahora}<\/ns3:Date>
+      <ns3:Employee>${emp}<\/ns3:Employee>
+    <\/ns3:Activity>`;
+      }).filter(Boolean).join('\n');
+
+      const conforme = getVal('clase_fallo') === '' || getVal('clase_fallo') === 'F1';
+      const estado = conforme ? 'Einsatzfähig' : 'Nicht einsatzfähig';
+
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<VPI_Data_Exchange xmlns="http://www.vpihamburg.de/vpi08/messages/"
+  xmlns:ns2="http://www.vpihamburg.de/vpi08/orders/"
+  xmlns:ns3="http://www.vpihamburg.de/vpi08/types/"
+  xmlns:ns4="http://www.vpihamburg.de/vpi08/general/">
+  <Header>
+    <VPI_version>3.1<\/VPI_version>
+    <Creation_time>${ahora}<\/Creation_time>
+    <Interchange_control_reference>${icr}<\/Interchange_control_reference>
+    <Sender>${VPI_CONFIG.sender}<\/Sender>
+    <Receiver>${VPI_CONFIG.receiver}<\/Receiver>
+  <\/Header>
+  <Body>
+    <carriedOutActivities>
+${trabajosXml}
+    <\/carriedOutActivities>
+    <Radsatz>
+      <ns4:technicalWheelsetOutgoing ns3:differentiator="Position" ns3:productIdentifier="${numEje}">
+        <ns3:Axle>
+          <ns3:AxleNumberOld>${numEje}<\/ns3:AxleNumberOld>
+          <ns3:JournalTreatedMechanicallyLeftA>${getVal('mang_a_del') ? 'true' : 'false'}<\/ns3:JournalTreatedMechanicallyLeftA>
+          <ns3:JournalTreatedMechanicallyRightB>${getVal('mang_b_del') ? 'true' : 'false'}<\/ns3:JournalTreatedMechanicallyRightB>
+        <\/ns3:Axle>
+        <ns3:WheelCollection>
+          <ns3:Wheel ns3:differentiator="Side">
+            <ns3:Side ns3:type="Side">A<\/ns3:Side>
+            <ns3:UTRadsatzkranz ns3:CaptureDate="${fCaptura}" ns3:type="TestResult">${getVal('velo_a') === 'Con resultados aceptables' ? 'mit akzeptablem Befund' : 'ohne Befund'}<\/ns3:UTRadsatzkranz>
+            <ns3:InteralStressTest ns3:CaptureDate="${fCaptura}" ns3:unit="MPa">${getVal('mpa_a') || ''}<\/ns3:InteralStressTest>
+            <ns3:NominalTreadDiameter ns3:unit="mm">${getVal('rod_a_dep') || ''}<\/ns3:NominalTreadDiameter>
+            <ns3:RadialDeviation ns3:CaptureDate="${fCaptura}" ns3:unit="mm">${getVal('alabeo_a_dep') || ''}<\/ns3:RadialDeviation>
+            <ns3:WheelProfileDenomination ns3:type="WheelProfileDenomination">${getVal('perfil') || 'S1002 15%'}<\/ns3:WheelProfileDenomination>
+            <ns3:FlangeThicknessSd ns3:unit="mm">${getVal('sd_a_dep') || ''}<\/ns3:FlangeThicknessSd>
+            <ns3:FlangeFaceQr ns3:unit="mm">${getVal('qr_a_dep') || ''}<\/ns3:FlangeFaceQr>
+            <ns3:FlangeHeigthSh ns3:unit="mm">${getVal('sh_a_dep') || ''}<\/ns3:FlangeHeigthSh>
+          <\/ns3:Wheel>
+          <ns3:Wheel ns3:differentiator="Side">
+            <ns3:Side ns3:type="Side">B<\/ns3:Side>
+            <ns3:UTRadsatzkranz ns3:CaptureDate="${fCaptura}" ns3:type="TestResult">${getVal('velo_b') === 'Con resultados aceptables' ? 'mit akzeptablem Befund' : 'ohne Befund'}<\/ns3:UTRadsatzkranz>
+            <ns3:InteralStressTest ns3:CaptureDate="${fCaptura}" ns3:unit="MPa">${getVal('mpa_b') || ''}<\/ns3:InteralStressTest>
+            <ns3:NominalTreadDiameter ns3:unit="mm">${getVal('rod_b_dep') || ''}<\/ns3:NominalTreadDiameter>
+            <ns3:RadialDeviation ns3:CaptureDate="${fCaptura}" ns3:unit="mm">${getVal('alabeo_b_dep') || ''}<\/ns3:RadialDeviation>
+            <ns3:WheelProfileDenomination ns3:type="WheelProfileDenomination">${getVal('perfil') || 'S1002 15%'}<\/ns3:WheelProfileDenomination>
+            <ns3:FlangeThicknessSd ns3:unit="mm">${getVal('sd_b_dep') || ''}<\/ns3:FlangeThicknessSd>
+            <ns3:FlangeFaceQr ns3:unit="mm">${getVal('qr_b_dep') || ''}<\/ns3:FlangeFaceQr>
+            <ns3:FlangeHeigthSh ns3:unit="mm">${getVal('sh_b_dep') || ''}<\/ns3:FlangeHeigthSh>
+          <\/ns3:Wheel>
+        <\/ns3:WheelCollection>
+        <ns3:BearingHousingCollection>
+          <ns3:BearingHousing ns3:differentiator="Side"><ns3:Side ns3:type="Side">A<\/ns3:Side><\/ns3:BearingHousing>
+          <ns3:BearingHousing ns3:differentiator="Side"><ns3:Side ns3:type="Side">B<\/ns3:Side><\/ns3:BearingHousing>
+        <\/ns3:BearingHousingCollection>
+        <ns3:BearingCollection>
+          <ns3:Bearing ns3:differentiator="Position"><ns3:Position ns3:type="BearingPosition">Innen A<\/ns3:Position><\/ns3:Bearing>
+          <ns3:Bearing ns3:differentiator="Position"><ns3:Position ns3:type="BearingPosition">Außen A<\/ns3:Position><\/ns3:Bearing>
+          <ns3:Bearing ns3:differentiator="Position"><ns3:Position ns3:type="BearingPosition">Innen B<\/ns3:Position><\/ns3:Bearing>
+          <ns3:Bearing ns3:differentiator="Position"><ns3:Position ns3:type="BearingPosition">Außen B<\/ns3:Position><\/ns3:Bearing>
+        <\/ns3:BearingCollection>
+        <ns3:Wheelsetnumber>${numEje}<\/ns3:Wheelsetnumber>
+        <ns3:ArDimension ns3:unit="mm">${getVal('ar_dep') || ''}<\/ns3:ArDimension>
+        <ns3:SrMass ns3:unit="mm">${getVal('sr_dep') || getVal('ar_dep') || ''}<\/ns3:SrMass>
+        <ns3:WheelsetType ns3:type="WheelsetType">${getVal('tipo_eje') || ''}<\/ns3:WheelsetType>
+        <ns3:EigentumsmerkmalRadsatz ns3:type="ListEigentumsmerkmal">VTG Rail Europe GmbH<\/ns3:EigentumsmerkmalRadsatz>
+        <ns3:IsMaintenanceLevel ns3:type="MaintenanceLevel">${getVal('nivel_mant') || 'IS1'}<\/ns3:IsMaintenanceLevel>
+        <ns3:WheelsetCaseType ns3:type="WheelsetBearingHousingType">UIC<\/ns3:WheelsetCaseType>
+        <ns3:MaximumLoad ns3:type="MaximalWheelsetLoad">${getVal('carga_eje') || '22.5'}<\/ns3:MaximumLoad>
+        <ns3:State ns3:type="WheelsetCondition">${estado}<\/ns3:State>
+        <ns3:TsiApproval>true<\/ns3:TsiApproval>
+        <ns3:GreenDotMarking>false<\/ns3:GreenDotMarking>
+        <ns3:HasZfPA>false<\/ns3:HasZfPA>
+        <ns3:HasZfPS>false<\/ns3:HasZfPS>
+        <ns3:HasZfPE>false<\/ns3:HasZfPE>
+        <ns3:ZfPE1Marking>false<\/ns3:ZfPE1Marking>
+      <\/ns4:technicalWheelsetOutgoing>
+    <\/Radsatz>
+  <\/Body>
+<\/VPI_Data_Exchange>`;
+
+      const fecha = getVal('fecha_creacion') || new Date().toISOString().split('T')[0];
+      const nombre = `hoja_vtg_${numEje}_${fecha}.xml`;
+      descargarArchivo(xml, nombre, 'application/xml;charset=utf-8;');
+    }
+
+    function generarPDF() {
+      window.print();
+    }
+
+    function descargarArchivo(contenido, nombre, tipo) {
+      const blob = new Blob([contenido], { type: tipo });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = nombre;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    let saveTimer = null;
+    function autosave() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        const data = {};
+        document.querySelectorAll('input,select,textarea').forEach(el => { if (el.id) data[el.id] = el.value; });
+        // Guardar estado checkboxes de trabajos
+        data._trabajos = TRABAJOS.map((_, i) => document.getElementById('chk_' + i)?.classList.contains('checked') || false);
+        try {
+          localStorage.setItem('vtg_hoja_draft', JSON.stringify(data));
+          const now = new Date();
+          document.getElementById('draft-bar').textContent = 'Borrador guardado a las ' + now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        } catch (e) { }
+      }, 600);
+    }
+
+    function loadDraft() {
+      try {
+        const raw = localStorage.getItem('vtg_hoja_draft');
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        Object.entries(data).forEach(([k, v]) => {
+          if (k === '_trabajos') return;
+          const el = document.getElementById(k);
+          if (el) el.value = v;
+        });
+        // Restaurar toggle buttons desde hidden inputs
+        document.querySelectorAll('input[type=hidden]').forEach(hidden => {
+          if (!hidden.id || !hidden.value) return;
+          const group = hidden.previousElementSibling;
+          if (!group || !group.classList.contains('toggle-group')) return;
+          group.querySelectorAll('.tog-btn').forEach(btn => {
+            if (btn.textContent.trim() === hidden.value) btn.classList.add('active');
+          });
+        });
+        if (data._trabajos) {
+          data._trabajos.forEach((checked, i) => {
+            if (checked) {
+              const chk = document.getElementById('chk_' + i);
+              if (chk) { chk.classList.add('checked'); chk.textContent = '✓'; }
+            }
+          });
+        }
+        document.getElementById('draft-bar').textContent = 'Borrador restaurado';
+        updateHeader();
+      } catch (e) { }
+    }
+
+    function nuevaFicha() {
+      document.querySelectorAll('input,textarea').forEach(el => el.value = '');
+      document.querySelectorAll('.tog-btn').forEach(el => el.classList.remove('active'));
+      TRABAJOS.forEach((_, i) => {
+        const chk = document.getElementById('chk_' + i);
+        if (chk) { chk.classList.remove('checked'); chk.textContent = '\u00a0'; }
+      });
+      fieldErrors = {}; currentStep = 0;
+      document.getElementById('main-form').style.display = 'block';
+      document.getElementById('nav-bar').style.display = 'flex';
+      document.getElementById('sent-view').style.display = 'none';
+      document.getElementById('header-eje').textContent = '—';
+      showSection(0);
+    }
+
+    // Init
+    initTrabajos();
+    loadDraft();
+    showSection(0);
+    const hoy = new Date().toISOString().split('T')[0];
+    if (!document.getElementById('fecha_creacion').value) document.getElementById('fecha_creacion').value = hoy;
+  </script>
+</body>
+
+</html>
