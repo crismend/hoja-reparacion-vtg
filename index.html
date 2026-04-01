@@ -1646,15 +1646,27 @@
       autosave();
     }
 
+    function hasVisibleContent(stepIndex) {
+      const sec = document.getElementById('sec' + stepIndex);
+      if (!sec) return false;
+      const visibleCards = Array.from(sec.querySelectorAll('.card, .med-group')).filter(el =>
+        el.style.display !== 'none' && !el.closest('[style*="display: none"]')
+      );
+      return visibleCards.length > 0;
+    }
+
     function buildDots() {
       const d = document.getElementById('dots');
       d.innerHTML = '';
       for (let i = 0; i < STEPS; i++) {
         const dot = document.createElement('div');
+        const isEmpty = i > 0 && i < STEPS - 1 && !hasVisibleContent(i);
         dot.className = 'dot' + (i === currentStep ? ' active' : i < currentStep ? ' done' : '');
+        if (isEmpty) dot.style.opacity = '0.2';
         d.appendChild(dot);
       }
-      document.getElementById('step-label').textContent = 'Paso ' + (currentStep + 1) + ' de ' + STEPS + ' — ' + STEP_NAMES[currentStep];
+      document.getElementById('step-label').textContent =
+        'Paso ' + (currentStep + 1) + ' de ' + STEPS + ' — ' + STEP_NAMES[currentStep];
     }
 
     function showSection(n) {
@@ -1667,8 +1679,26 @@
     }
 
     function goStep(n) { currentStep = n; showSection(n); }
-    function nextStep() { if (currentStep < STEPS - 1) { currentStep++; showSection(currentStep); } }
-    function prevStep() { if (currentStep > 0) { currentStep--; showSection(currentStep); } }
+    function nextStep() {
+      let next = currentStep + 1;
+      while (next < STEPS - 1 && !hasVisibleContent(next)) {
+        next++;
+      }
+      if (next < STEPS) {
+        currentStep = next;
+        showSection(currentStep);
+      }
+    }
+    function prevStep() {
+      let prev = currentStep - 1;
+      while (prev > 0 && !hasVisibleContent(prev)) {
+        prev--;
+      }
+      if (prev >= 0) {
+        currentStep = prev;
+        showSection(currentStep);
+      }
+    }
     function getVal(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
     function updateHeader() {
       const n = getVal('num_eje');
