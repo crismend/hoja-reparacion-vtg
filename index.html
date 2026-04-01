@@ -90,6 +90,9 @@
       border-radius: var(--radius-lg);
       padding: 14px 18px;
       margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .app-header h1 {
@@ -719,12 +722,17 @@
 <body>
 
   <div class="app-header">
-    <h1>Hoja de Reparación de Eje Completo</h1>
-    <div class="meta">
-      <span>VTG Rail Europe GmbH</span>
-      <span>Taller: V-REQ (131)</span>
-      <span id="header-eje">—</span>
+    <div>
+      <h1>Hoja de Reparación de Eje Completo</h1>
+      <div class="meta">
+        <span>VTG Rail Europe GmbH</span>
+        <span>Taller: V-REQ (131)</span>
+        <span id="header-eje">—</span>
+      </div>
     </div>
+    <button id="btn-cambiar-puesto" onclick="volverRoles()" style="display:none;padding:8px 14px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:0.5px solid var(--border2);background:transparent;color:var(--text2);font-family:inherit">
+      ← Cambiar puesto
+    </button>
   </div>
 
   <div class="draft-bar" id="draft-bar"></div>
@@ -1498,11 +1506,13 @@
     let currentRole = null;
 
     function selectRole(role) {
+      history.pushState({ step: 'form' }, '');
       currentRole = role;
       document.getElementById('role-screen').style.display = 'none';
       document.getElementById('main-form').style.display = 'block';
       document.getElementById('step-nav').style.display = 'block';
       document.getElementById('nav-bar').style.display = 'flex';
+      document.getElementById('btn-cambiar-puesto').style.display = 'block';
       applyRoleFilter(role);
       loadDraft();
       showSection(0);
@@ -1517,6 +1527,16 @@
         const visible = roles.includes('all') || roles.includes(role);
         card.style.display = visible ? 'block' : 'none';
       });
+    }
+
+    function volverRoles() {
+      currentRole = null;
+      document.getElementById('role-screen').style.display = 'block';
+      document.getElementById('main-form').style.display = 'none';
+      document.getElementById('nav-bar').style.display = 'none';
+      document.getElementById('step-nav').style.display = 'none';
+      document.getElementById('btn-cambiar-puesto').style.display = 'none';
+      document.getElementById('header-eje').textContent = '—';
     }
 
     const STEPS = 6;
@@ -1915,7 +1935,14 @@ ${trabajosXml}
       document.getElementById('main-form').style.display = 'none';
       document.getElementById('nav-bar').style.display = 'none';
       document.getElementById('step-nav').style.display = 'none';
+      document.getElementById('btn-cambiar-puesto').style.display = 'none';
     }
+
+    window.addEventListener('popstate', function(e) {
+      if (currentRole) {
+        volverRoles();
+      }
+    });
 
     // Init
     initTrabajos();
