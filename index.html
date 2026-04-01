@@ -752,7 +752,7 @@
      PASO 1 — IDENTIFICACIÓN
 ══════════════════════════════════ -->
     <div id="sec0" class="section-view active">
-      <div class="card">
+      <div class="card" data-roles="all">
         <div class="card-title">Identificación del eje</div>
         <div class="g2">
           <div class="field"><label>Número del eje completo</label><input type="text" id="num_eje"
@@ -766,7 +766,8 @@
           <div class="field"><label>Fecha de creación</label><input type="date" id="fecha_creacion"
               oninput="autosave()"></div>
         </div>
-        <hr class="divider">
+      </div>
+      <div class="card" data-roles="ejes,calidad">
         <div class="card-title">Datos del eje</div>
         <div class="g2">
           <div class="field"><label>Tipo del eje completo</label><input type="text" id="tipo_eje" placeholder="Ej: ES3"
@@ -790,7 +791,8 @@
           <div class="field"><label>Carga por eje permitida [t]</label><input type="text" id="carga_eje"
               placeholder="Ej: 22,5" inputmode="decimal" oninput="autosave()"></div>
         </div>
-        <hr class="divider">
+      </div>
+      <div class="card" data-roles="ejes,calidad">
         <div class="card-title">Datos del vagón</div>
         <div class="g2">
           <div class="field"><label>Programa de mantenimiento</label><input type="text" id="prog_mant"
@@ -813,7 +815,7 @@
      PASO 2 — TRABAJOS REALIZADOS
 ══════════════════════════════════ -->
     <div id="sec1" class="section-view">
-      <div class="card">
+      <div class="card" data-roles="ends,calidad">
         <div class="card-title">Nivel de mantenimiento</div>
         <div class="toggle-group" id="nivel-mant">
           <div class="tog-btn" onclick="toggleMultiple(this,'nivel_mant')">IS 0</div>
@@ -825,7 +827,7 @@
         <input type="hidden" id="nivel_mant">
       </div>
 
-      <div class="card">
+      <div class="card" data-roles="ends,tornero,ejes,pintores,calidad">
         <div class="card-title">Trabajos realizados</div>
         <p style="font-size:13px;color:var(--text3);margin-bottom:12px">Marca cada trabajo completado e indica fecha y
           empleado responsable.</p>
@@ -833,7 +835,7 @@
         <div id="trabajos-list"></div>
       </div>
 
-      <div class="card">
+      <div class="card" data-roles="ends,calidad">
         <div class="card-title">Ensayos no destructivos</div>
         <div class="g2" style="margin-bottom:12px">
           <div class="field">
@@ -863,7 +865,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-roles="ends,calidad">
         <div class="card-title">Inspección</div>
         <div class="field" style="margin-bottom:10px">
           <label>Tipo de inspección</label>
@@ -890,7 +892,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-roles="ends,calidad">
         <div class="card-title">Observaciones y/o defectos</div>
         <div class="field">
           <textarea id="observaciones" rows="3" placeholder="Ej: FAG. Rodamientos nuevos..."
@@ -903,7 +905,7 @@
      PASO 3 — DATOS DE RUEDAS
 ══════════════════════════════════ -->
     <div id="sec2" class="section-view">
-      <div class="card">
+      <div class="card" data-roles="ejes,calidad">
         <div class="card-title">Tipo de eje y ruedas</div>
         <div class="g3">
           <div class="field"><label>Tipo de rueda</label><input type="text" id="tipo_rueda" placeholder="Ej: ER7"
@@ -929,7 +931,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-roles="ejes,calidad">
         <div class="card-title">Rueda — Lado A</div>
         <div class="g3">
           <div class="field"><label>Fabricante de la rueda</label><input type="text" id="fab_rueda_a"
@@ -942,7 +944,7 @@
         <div class="field"><label>AR1/AR2</label><input type="text" id="ar_a" oninput="autosave()"></div>
       </div>
 
-      <div class="card">
+      <div class="card" data-roles="ejes,calidad">
         <div class="card-title">Rueda — Lado B</div>
         <div class="g3">
           <div class="field"><label>Fabricante de la rueda</label><input type="text" id="fab_rueda_b"
@@ -961,7 +963,7 @@
 ══════════════════════════════════ -->
     <div id="sec3" class="section-view">
 
-      <div class="card">
+      <div class="card" data-roles="tornero,calidad">
         <div class="card-title">Tabla de límites de referencia</div>
         <table class="lim-table">
           <tr>
@@ -1016,7 +1018,7 @@
       </div>
 
       <!-- Sd -->
-      <div class="med-group">
+      <div class="med-group" data-roles="tornero,calidad">
         <div class="med-title">Sd — Espesor de pestaña</div>
         <span class="med-limit">Límite: &lt; 25 mm (para 840&lt;dM&lt;1000mm) | Diferencia máx. entre ruedas: &gt; 2
           mm</span>
@@ -1048,7 +1050,7 @@
       </div>
 
       <!-- Sh -->
-      <div class="med-group">
+      <div class="med-group" data-roles="tornero,calidad">
         <div class="med-title">Sh — Altura de pestaña</div>
         <span class="med-limit">Límite: &gt; 34 mm | Diferencia máx. entre ruedas: &gt; 1 mm</span>
         <div class="g2" style="margin-bottom:8px">
@@ -1075,7 +1077,7 @@
       </div>
 
       <!-- qR -->
-      <div class="med-group">
+      <div class="med-group" data-roles="tornero,calidad">
         <div class="med-title">qR — Cara de la pestaña</div>
         <span class="med-limit">Límite: &lt; 7,5 mm</span>
         <div class="g2" style="margin-bottom:8px">
@@ -1102,7 +1104,7 @@
       </div>
 
       <!-- Anchura de llanta -->
-      <div class="med-group">
+      <div class="med-group" data-roles="tornero,calidad">
         <div class="med-title">Anchura de llanta</div>
         <div class="g2" style="margin-bottom:8px">
           <div>
@@ -1127,7 +1129,7 @@
       </div>
 
       <!-- Ø Banda rodadura -->
-      <div class="med-group">
+      <div class="med-group" data-roles="tornero,calidad">
         <div class="med-title">Ø Banda rodadura</div>
         <div class="g2" style="margin-bottom:8px">
           <div>
@@ -1152,7 +1154,7 @@
       </div>
 
       <!-- Ovalización y Alabeo -->
-      <div class="med-group">
+      <div class="med-group" data-roles="tornero,calidad">
         <div class="med-title">Ovalización</div>
         <span class="med-limit">ddM máx: 0,3 mm</span>
         <div class="g2" style="margin-bottom:8px">
@@ -1178,7 +1180,7 @@
         <div class="warn-msg" id="warn_oval">⚠ Ovalización supera 0,3 mm</div>
       </div>
 
-      <div class="med-group">
+      <div class="med-group" data-roles="tornero,calidad">
         <div class="med-title">Alabeo</div>
         <div class="g2" style="margin-bottom:8px">
           <div>
@@ -1203,7 +1205,7 @@
       </div>
 
       <!-- Alabeo mangueta -->
-      <div class="med-group">
+      <div class="med-group" data-roles="ejes,calidad">
         <div class="med-title">Alabeo mangueta ¹</div>
         <span class="med-limit">¹ Medir únicamente si no gira sobre las manguetas</span>
         <div class="g2">
@@ -1225,7 +1227,7 @@
     <div id="sec4" class="section-view">
 
       <!-- Manguetas y pista -->
-      <div class="card">
+      <div class="card" data-roles="ejes,calidad">
         <div class="card-title">Manguetas (Ø Mangueta y Ø Pista interior)</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px">
           <div>
@@ -1272,7 +1274,7 @@
       </div>
 
       <!-- SR, AR, C-C', Alabeo fuste -->
-      <div class="card">
+      <div class="card" data-roles="tornero,ejes,calidad">
         <div class="card-title">Mediciones generales del eje</div>
         <div class="g2" style="margin-bottom:10px">
           <div>
@@ -1329,7 +1331,7 @@
       </div>
 
       <!-- Rodamientos -->
-      <div class="card">
+      <div class="card" data-roles="ejes,calidad">
         <div class="card-title">Rodamientos</div>
         <div class="g2">
           <div class="field"><label>Fabricante de rodamiento</label><input type="text" id="fab_rod"
@@ -1362,7 +1364,7 @@
       </div>
 
       <!-- Grasa -->
-      <div class="card">
+      <div class="card" data-roles="pintores,calidad">
         <div class="card-title">Grasa y pintura</div>
         <div class="field" style="margin-bottom:10px">
           <label>Tipo de grasa</label>
@@ -1447,7 +1449,7 @@
      PASO 6 — RESUMEN Y CONFIRMACIÓN
 ══════════════════════════════════ -->
     <div id="sec5" class="section-view">
-      <div class="card">
+      <div class="card" data-roles="all">
         <div id="summary-content"></div>
       </div>
       <div id="errors-box" style="display:none" class="alert warning">
@@ -1501,11 +1503,20 @@
       document.getElementById('main-form').style.display = 'block';
       document.getElementById('step-nav').style.display = 'block';
       document.getElementById('nav-bar').style.display = 'flex';
+      applyRoleFilter(role);
       loadDraft();
       showSection(0);
       const hoy = new Date().toISOString().split('T')[0];
       if (!document.getElementById('fecha_creacion').value)
         document.getElementById('fecha_creacion').value = hoy;
+    }
+
+    function applyRoleFilter(role) {
+      document.querySelectorAll('.card[data-roles], .med-group[data-roles]').forEach(card => {
+        const roles = card.getAttribute('data-roles').split(',');
+        const visible = roles.includes('all') || roles.includes(role);
+        card.style.display = visible ? 'block' : 'none';
+      });
     }
 
     const STEPS = 6;
