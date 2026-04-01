@@ -811,6 +811,40 @@
       </div>
 
       <div class="card">
+        <div class="card-title">Ensayos no destructivos</div>
+        <div class="g2" style="margin-bottom:12px">
+          <div class="field">
+            <label>Rueda A [MPA]</label>
+            <input type="number" step="1" inputmode="numeric" id="mpa_a" placeholder="Ej: -85" oninput="autosave()">
+          </div>
+          <div class="field">
+            <label>Rueda B [MPA]</label>
+            <input type="number" step="1" inputmode="numeric" id="mpa_b" placeholder="Ej: -80" oninput="autosave()">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Rueda A — resultado velo MT</label>
+          <div class="toggle-group" id="velo-a-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'velo_a')">Sin resultados</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'velo_a')">Con resultados aceptables</div>
+          </div>
+          <input type="hidden" id="velo_a">
+        </div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Rueda B — resultado velo MT</label>
+          <div class="toggle-group" id="velo-b-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'velo_b')">Sin resultados</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'velo_b')">Con resultados aceptables</div>
+          </div>
+          <input type="hidden" id="velo_b">
+        </div>
+        <div class="field">
+          <label>EM [año]</label>
+          <input type="text" id="em_anio" inputmode="numeric" placeholder="Año" oninput="autosave()">
+        </div>
+      </div>
+
+      <div class="card">
         <div class="card-title">Observaciones y/o defectos</div>
         <div class="field">
           <textarea id="observaciones" rows="3" placeholder="Ej: FAG. Rodamientos nuevos..."
@@ -1625,6 +1659,10 @@
             ['Responsable', getVal('nombre_resp')],
             ['Fecha montaje', getVal('fecha_montaje')],
             ['Responsable montaje', getVal('nombre_montaje')],
+            ['Rueda A [MPA]', getVal('mpa_a')],
+            ['Rueda B [MPA]', getVal('mpa_b')],
+            ['Rueda A velo MT', getVal('velo_a')],
+            ['Rueda B velo MT', getVal('velo_b')],
           ]
         },
       ];
@@ -1701,6 +1739,8 @@ ${trabajosXml}
             <ns3:FlangeThicknessSd ns3:unit="mm">${getVal('sd_a_dep') || ''}<\/ns3:FlangeThicknessSd>
             <ns3:FlangeFaceQr ns3:unit="mm">${getVal('qr_a_dep') || ''}<\/ns3:FlangeFaceQr>
             <ns3:FlangeHeigthSh ns3:unit="mm">${getVal('sh_a_dep') || ''}<\/ns3:FlangeHeigthSh>
+            <ns3:UTRadsatzkranz ns3:CaptureDate="${fCaptura}" ns3:type="TestResult">${getVal('velo_a') === 'Con resultados aceptables' ? 'mit akzeptablem Befund' : 'ohne Befund'}<\/ns3:UTRadsatzkranz>
+            <ns3:InteralStressTest ns3:CaptureDate="${fCaptura}" ns3:unit="MPa">${getVal('mpa_a') || ''}<\/ns3:InteralStressTest>
           <\/ns3:Wheel>
           <ns3:Wheel ns3:differentiator="Side">
             <ns3:Side ns3:type="Side">B<\/ns3:Side>
@@ -1710,6 +1750,8 @@ ${trabajosXml}
             <ns3:FlangeThicknessSd ns3:unit="mm">${getVal('sd_b_dep') || ''}<\/ns3:FlangeThicknessSd>
             <ns3:FlangeFaceQr ns3:unit="mm">${getVal('qr_b_dep') || ''}<\/ns3:FlangeFaceQr>
             <ns3:FlangeHeigthSh ns3:unit="mm">${getVal('sh_b_dep') || ''}<\/ns3:FlangeHeigthSh>
+            <ns3:UTRadsatzkranz ns3:CaptureDate="${fCaptura}" ns3:type="TestResult">${getVal('velo_b') === 'Con resultados aceptables' ? 'mit akzeptablem Befund' : 'ohne Befund'}<\/ns3:UTRadsatzkranz>
+            <ns3:InteralStressTest ns3:CaptureDate="${fCaptura}" ns3:unit="MPa">${getVal('mpa_b') || ''}<\/ns3:InteralStressTest>
           <\/ns3:Wheel>
         <\/ns3:WheelCollection>
         <ns3:BearingHousingCollection>
