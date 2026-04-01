@@ -1414,7 +1414,7 @@
       </div>
 
       <!-- Historial mantenimiento -->
-      <div class="card">
+      <div class="card" data-roles="ejes,calidad">
         <div class="card-title">Historial de mantenimiento anterior</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
           <div class="field"><label>Nueva construcción — Fecha</label><input type="date" id="hist_nueva_fecha"
@@ -1527,6 +1527,11 @@
         const visible = roles.includes('all') || roles.includes(role);
         card.style.display = visible ? 'block' : 'none';
       });
+      document.querySelectorAll('.trabajo-item[data-roles]').forEach(item => {
+        const roles = item.getAttribute('data-roles').split(',');
+        const visible = roles.includes('all') || roles.includes(role);
+        item.style.display = visible ? 'block' : 'none';
+      });
     }
 
     function volverRoles() {
@@ -1545,18 +1550,18 @@
     let fieldErrors = {};
 
     const TRABAJOS = [
-      { code: 'CL', desc: 'Clasificación nivel mant.' },
-      { code: 'A', desc: 'Ultrasonido del eje montado, fisuras en eje' },
-      { code: 'B', desc: 'Ultrasonido de llantas de rueda, fisuras transversales' },
-      { code: 'D', desc: 'Ultrasonido de llantas de rueda, tens. residual' },
-      { code: 'E', desc: 'Velo de rueda MT, fisuras' },
-      { code: 'EM', desc: 'Canal de descarga' },
-      { code: 'S', desc: 'Ensayo MT de mangueta' },
-      { code: 'W', desc: 'Ensayo MT del eje' },
-      { code: 'IR', desc: 'Inspección rodamientos' },
-      { code: 'PT', desc: 'Perfil torneado' },
-      { code: 'MR', desc: 'Montaje rodamientos' },
-      { code: 'EP', desc: 'Eje protecc. anticorrosión' },
+      { code: 'CL', desc: 'Clasificación nivel mant.',                             roles: ['ends','calidad'] },
+      { code: 'A',  desc: 'Ultrasonido del eje montado, fisuras en eje',            roles: ['ends','calidad'] },
+      { code: 'B',  desc: 'Ultrasonido de llantas de rueda, fisuras transversales', roles: ['ends','calidad'] },
+      { code: 'D',  desc: 'Ultrasonido de llantas de rueda, tens. residual',        roles: ['ends','calidad'] },
+      { code: 'E',  desc: 'Velo de rueda MT, fisuras',                              roles: ['ends','calidad'] },
+      { code: 'EM', desc: 'Canal de descarga',                                      roles: ['ends','calidad'] },
+      { code: 'S',  desc: 'Ensayo MT de mangueta',                                  roles: ['ends','calidad'] },
+      { code: 'W',  desc: 'Ensayo MT del eje',                                      roles: ['ends','calidad'] },
+      { code: 'IR', desc: 'Inspección rodamientos',                                 roles: ['ejes','calidad'] },
+      { code: 'PT', desc: 'Perfil torneado',                                        roles: ['tornero','calidad'] },
+      { code: 'MR', desc: 'Montaje rodamientos',                                    roles: ['ejes','calidad'] },
+      { code: 'EP', desc: 'Eje protecc. anticorrosión',                             roles: ['pintores','calidad'] },
     ];
 
     const vtgLimits = {
@@ -1575,6 +1580,8 @@
         const id = 'trab_' + i;
         const div = document.createElement('div');
         div.className = 'trabajo-item';
+        div.setAttribute('data-roles', t.roles.join(','));
+        div.setAttribute('data-index', i);
         div.innerHTML = `
       <div class="trabajo-header">
         <div class="trabajo-check" id="chk_${i}" onclick="toggleTrabajo(${i})">&nbsp;<\/div>
