@@ -702,6 +702,17 @@
       border-top: 0.5px solid var(--border);
       margin: 14px 0;
     }
+    #role-screen { display: block; padding: 1rem 0; }
+    .role-btn {
+      width: 100%; padding: 18px 20px;
+      border-radius: var(--radius-lg);
+      font-size: 16px; font-weight: 500;
+      cursor: pointer; border: 2px solid transparent;
+      font-family: inherit; transition: opacity 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      margin-bottom: 10px; text-align: left;
+    }
+    .role-btn:active { opacity: 0.85; transform: scale(0.98); }
   </style>
 </head>
 
@@ -718,12 +729,24 @@
 
   <div class="draft-bar" id="draft-bar"></div>
 
-  <div class="step-nav">
+  <div id="role-screen">
+    <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px;text-align:center">
+      <h2 style="font-size:18px;font-weight:500;margin-bottom:6px">Hoja de Reparación VTG</h2>
+      <p style="font-size:13px;color:var(--text3)">Selecciona tu puesto para continuar</p>
+    </div>
+    <button class="role-btn" style="background:#E8520A;color:#fff" onclick="selectRole('ends')">🔴 END's — Ensayos no destructivos</button>
+    <button class="role-btn" style="background:#4CAF50;color:#fff" onclick="selectRole('tornero')">🟢 Torneros — Perfil y mediciones</button>
+    <button class="role-btn" style="background:#2196F3;color:#fff" onclick="selectRole('ejes')">🔵 Operario de ejes — Montaje y rodamientos</button>
+    <button class="role-btn" style="background:#FF9800;color:#fff" onclick="selectRole('pintores')">🟠 Pintores — Protección anticorrosión</button>
+    <button class="role-btn" style="background:#FDD835;color:#1a1a18" onclick="selectRole('calidad')">🟡 Calidad — Acceso completo</button>
+  </div>
+
+  <div class="step-nav" id="step-nav" style="display:none">
     <div class="step-label" id="step-label">Paso 1 de 6</div>
     <div class="step-dots" id="dots"></div>
   </div>
 
-  <div id="main-form">
+  <div id="main-form" style="display:none">
 
     <!-- ══════════════════════════════════
      PASO 1 — IDENTIFICACIÓN
@@ -1464,12 +1487,27 @@
   </div>
 
   <!-- NAV -->
-  <div class="nav-bar" id="nav-bar">
+  <div class="nav-bar" id="nav-bar" style="display:none">
     <button class="btn" id="btn-prev" onclick="prevStep()" style="visibility:hidden">Anterior</button>
     <button class="btn primary" id="btn-next" onclick="nextStep()">Siguiente</button>
   </div>
 
   <script>
+    let currentRole = null;
+
+    function selectRole(role) {
+      currentRole = role;
+      document.getElementById('role-screen').style.display = 'none';
+      document.getElementById('main-form').style.display = 'block';
+      document.getElementById('step-nav').style.display = 'block';
+      document.getElementById('nav-bar').style.display = 'flex';
+      loadDraft();
+      showSection(0);
+      const hoy = new Date().toISOString().split('T')[0];
+      if (!document.getElementById('fecha_creacion').value)
+        document.getElementById('fecha_creacion').value = hoy;
+    }
+
     const STEPS = 6;
     const STEP_NAMES = ['Identificación', 'Trabajos realizados', 'Datos de ruedas', 'Mediciones', 'Manguetas, rodamientos y grasa', 'Resumen'];
     let currentStep = 0;
@@ -1861,14 +1899,15 @@ ${trabajosXml}
       document.getElementById('sent-view').style.display = 'none';
       document.getElementById('header-eje').textContent = '—';
       showSection(0);
+      currentRole = null;
+      document.getElementById('role-screen').style.display = 'block';
+      document.getElementById('main-form').style.display = 'none';
+      document.getElementById('nav-bar').style.display = 'none';
+      document.getElementById('step-nav').style.display = 'none';
     }
 
     // Init
     initTrabajos();
-    loadDraft();
-    showSection(0);
-    const hoy = new Date().toISOString().split('T')[0];
-    if (!document.getElementById('fecha_creacion').value) document.getElementById('fecha_creacion').value = hoy;
   </script>
 </body>
 
