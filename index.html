@@ -838,6 +838,29 @@
           </div>
           <input type="hidden" id="velo_b">
         </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Inspección</div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Tipo de inspección</label>
+          <div class="toggle-group" id="tipo-insp-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Inspección inicial</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Parcial</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Repet.</div>
+          </div>
+          <input type="hidden" id="tipo_inspeccion">
+        </div>
+        <div class="field" style="margin-bottom:10px">
+          <label>Clase de fallo</label>
+          <div class="toggle-group" id="clase-fallo-grp">
+            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F1</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F2</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F3</div>
+            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F4</div>
+          </div>
+          <input type="hidden" id="clase_fallo">
+        </div>
         <div class="field">
           <label>EM [año]</label>
           <input type="text" id="em_anio" inputmode="numeric" placeholder="Año" oninput="autosave()">
@@ -1355,32 +1378,6 @@
           </div>
           <input type="hidden" id="color_ral">
         </div>
-      </div>
-
-      <!-- Inspección -->
-      <div class="card">
-        <div class="card-title">Inspección y cierre técnico</div>
-        <div class="field" style="margin-bottom:10px">
-          <label>Tipo de inspección</label>
-          <div class="toggle-group" id="tipo-insp-grp">
-            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Inspección inicial</div>
-            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Parcial</div>
-            <div class="tog-btn" onclick="toggleSingle(this,'tipo_inspeccion')">Repet.</div>
-          </div>
-          <input type="hidden" id="tipo_inspeccion">
-        </div>
-        <div class="field">
-          <label>Clase de fallo</label>
-          <div class="toggle-group" id="clase-fallo-grp">
-            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F1</div>
-            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F2</div>
-            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F3</div>
-            <div class="tog-btn" onclick="toggleSingle(this,'clase_fallo')">F4</div>
-          </div>
-          <input type="hidden" id="clase_fallo">
-        </div>
-        <div class="field" style="margin-top:10px"><label>EM [año]</label><input type="text" id="em_anio"
-            inputmode="numeric" oninput="autosave()"></div>
       </div>
 
       <!-- Historial mantenimiento -->
